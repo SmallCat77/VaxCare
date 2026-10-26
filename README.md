@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+
 # VaxCare — Barangay Vaccination Management System
 
 VaxCare is a web-based vaccination and resident-management system built with React, Vite, TypeScript, Express, and PostgreSQL. It includes staff and resident sign-in, resident profiles, vaccination records, appointments, vaccine inventory, notifications, and reports.
@@ -68,4 +70,8 @@ If you loaded the included demo seed file, its staff accounts can be used for lo
 - CORS is restricted to the configured `CORS_ORIGIN` list.
 - JSON request bodies are limited to 1 MB.
 - Resident accounts receive only their own schedules from the schedules endpoint.
-- Use synthetic data for demos. Do not put real resident health information into a public or untrusted deployment.
+- # Use synthetic data for demos. Do not put real resident health information into a public or untrusted deployment.
+
+# VaxCare
+
+> > > > > > > 59e7acb86f119745cdd2a4fb2ffbe7125633cbbe
