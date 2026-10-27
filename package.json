@@ -1,0 +1,17 @@
+{
+  "name": "vaxcare-workspace",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace=@vaxcare/frontend",
+    "dev:backend": "npm run dev --workspace=@vaxcare/backend",
+    "build": "npm run build --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
