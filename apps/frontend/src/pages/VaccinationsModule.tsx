@@ -61,7 +61,11 @@ export function VaccinationsModule({ residents, supplies, onRecordVaccination }:
                 <label className="text-xs font-medium text-muted-foreground block mb-1">Vaccine</label>
                 <select value={form.vaccine} onChange={e => setForm(f => ({ ...f, vaccine: e.target.value }))} className="w-full bg-input-background border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none">
                   <option value="">Select vaccine…</option>
-                  {supplies.map(s => <option key={s.id}>{s.name}</option>)}
+                  {supplies.map(s => (
+                    <option key={s.id} value={s.name} disabled={s.quantity <= 0}>
+                      {s.name} ({s.quantity} doses available){s.quantity <= 0 ? " — Out of Stock" : ""}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-3">

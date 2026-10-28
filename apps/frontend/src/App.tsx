@@ -134,8 +134,19 @@ export default function App() {
 
   async function handleRecordVaccination(residentId: string, data: { vaccine: string; dose: string; date: string; worker: string; batchNo: string; site: string }) {
     const record = await vaccinationsApi.add(residentId, data);
-    const refreshed = await residentsApi.get(residentId);
-    setResidents(prev => prev.map(r => (r.id === residentId ? refreshed : r)));
+    const [refreshedResident, refreshedSupplies] = await Promise.all([
+      residentsApi.get(residentId),
+      suppliesApi.list(),
+    ]);
+    setResidents(prev => prev.map(r => (r.id === residentId ? refreshedResident : r)));
+    setSupplies(refreshedSupplies);
+    if (user && user.role !== "resident") {
+      try {
+        setNotifications(await notificationsApi.list());
+      } catch {
+        /* non-fatal */
+      }
+    }
     void record;
   }
 
