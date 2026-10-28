@@ -237,9 +237,20 @@ export default function App() {
         <Route path="/priority" element={<PriorityPatients residents={residents} schedules={schedules} />} />
         <Route path="/certificate" element={<VaccinationCertificate residents={residents} />} />
         <Route path="/batches" element={<BatchTracking residents={residents} supplies={supplies} />} />
-        {user.role === "admin" && (
-          <Route path="/users" element={<UsersModule users={users} onUsersChange={() => { if (user?.role === 'admin') usersApi.list().then(setUsers); }} currentUser={user} />} />
-        )}
+        <Route 
+          path="/users" 
+          element={
+            user.role === "admin" ? (
+              <UsersModule 
+                users={users} 
+                onUsersChange={() => { if (user?.role === 'admin') usersApi.list().then(setUsers); }} 
+                currentUser={user} 
+              />
+            ) : (
+              <Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />
+            )
+          } 
+        />
         
         <Route path="*" element={<Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />} />
       </Route>

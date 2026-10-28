@@ -68,6 +68,7 @@ export function AppLayout({ user, unreadCount, dataLoading, dataError, onLogout,
   const mgmtItems = visibleNav.filter(i => ["dashboard", "residents", "vaccinations", "schedule", "inventory", "reports"].includes(i.id));
   const serviceItems = visibleNav.filter(i => ["portal", "notifications"].includes(i.id));
   const advancedItems = visibleNav.filter(i => ["timeline", "family", "priority", "certificate", "batches"].includes(i.id));
+  const adminItems = visibleNav.filter(i => ["users"].includes(i.id));
 
   return (
     <div className="flex h-screen bg-background overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -110,6 +111,14 @@ export function AppLayout({ user, unreadCount, dataLoading, dataError, onLogout,
           {advancedItems.length > 0 && <>
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-3 py-2 mt-2">Advanced</p>
             {advancedItems.map(item => (
+              <NavLink key={item.id} to={item.path} onClick={() => setSidebarOpen(false)} className={({ isActive }) => `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${isActive ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"}`}>
+                {item.icon} {item.label}
+              </NavLink>
+            ))}
+          </>}
+          {adminItems.length > 0 && <>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-3 py-2 mt-2">Administration</p>
+            {adminItems.map(item => (
               <NavLink key={item.id} to={item.path} onClick={() => setSidebarOpen(false)} className={({ isActive }) => `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${isActive ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"}`}>
                 {item.icon} {item.label}
               </NavLink>
