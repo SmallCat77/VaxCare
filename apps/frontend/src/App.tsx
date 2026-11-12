@@ -7,6 +7,9 @@ import {
 
 const AUTH_USER_KEY = "vaxcare_user";
 
+import { HomePage } from "./pages/HomePage";
+import { StaffLoginScreen } from "./pages/StaffLoginScreen";
+import { ResidentLoginScreen } from "./pages/ResidentLoginScreen";
 import { LoginScreen } from "./pages/LoginScreen";
 
 import {
@@ -20,6 +23,7 @@ import { ScheduleModule } from "./pages/ScheduleModule";
 import { InventoryModule } from "./pages/InventoryModule";
 import { ReportsModule } from "./pages/ReportsModule";
 import { NotificationsModule } from "./pages/NotificationsModule";
+import { MessagingModule } from "./pages/MessagingModule";
 import { ResidentPortal } from "./pages/ResidentPortal";
 import { HealthHistoryTimeline } from "./pages/HealthHistoryTimeline";
 import { FamilyHealthDashboard } from "./pages/FamilyHealthDashboard";
@@ -178,60 +182,237 @@ export default function App() {
     }
   }
 
-  if (!user) {
-    return (
-      <Routes>
-        <Route path="*" element={<LoginScreen onLogin={handleLogin} />} />
-      </Routes>
-    );
-  }
-
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <Routes>
-      <Route 
+      {/* ── Public Home Page (Accessible by all visitors, residents, and staff) ── */}
+      <Route path="/" element={<HomePage user={user} onLogout={handleLogout} />} />
+
+      {/* ── Dedicated Staff Authentication Routes ── */}
+      <Route
+        path="/staff/login"
         element={
-          <AppLayout 
-            user={user} 
-            unreadCount={unreadCount} 
-            dataLoading={dataLoading} 
-            dataError={dataError} 
-            onLogout={handleLogout} 
-            onRetryLoad={() => loadData(user)} 
-          />
+          user ? (
+            <Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />
+          ) : (
+            <StaffLoginScreen onLogin={handleLogin} />
+          )
         }
-      >
-        <Route path="/" element={<Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />} />
-        
-        <Route path="/dashboard" element={
-          <Dashboard 
-            residents={residents} 
-            supplies={supplies} 
-            schedules={schedules} 
-            notifications={notifications} 
-            monthlyVaxData={monthlyVaxData} 
-            setModule={(mod) => navigate(`/${mod}`)} 
+      />
+      <Route path="/staff" element={<Navigate to="/staff/login" replace />} />
+
+      {/* ── Dedicated Resident Authentication Routes ── */}
+      <Route
+        path="/resident/login"
+        element={
+          user ? (
+            <Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />
+          ) : (
+            <ResidentLoginScreen onLogin={handleLogin} />
+          )
+        }
+      />
+      <Route path="/resident" element={<Navigate to="/resident/login" replace />} />
+
+      {/* ── General Login Gateway ── */}
+      <Route
+        path="/login"
+        element={
+          user ? (
+            <Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />
+          ) : (
+            <LoginScreen onLogin={handleLogin} />
+          )
+        }
+      />
+
+      {/* ── Authenticated Application Workspace ── */}
+      {user ? (
+        <Route
+          element={
+            <AppLayout
+              user={user}
+              unreadCount={unreadCount}
+              dataLoading={dataLoading}
+              dataError={dataError}
+              onLogout={handleLogout}
+              onRetryLoad={() => loadData(user)}
+            />
+          }
+        >
+          {/* Staff-exclusive Management Modules (Residents redirected to portal) */}
+          <Route
+            path="/dashboard"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <Dashboard
+                  residents={residents}
+                  supplies={supplies}
+                  schedules={schedules}
+                  notifications={notifications}
+                  monthlyVaxData={monthlyVaxData}
+                  setModule={(mod) => navigate(`/${mod}`)}
+                />
+              )
+            }
           />
-        } />
-        <Route path="/residents" element={<ResidentsModule residents={residents} schedules={schedules} onAddResident={handleAddResident} />} />
-        <Route path="/vaccinations" element={<VaccinationsModule residents={residents} supplies={supplies} onRecordVaccination={handleRecordVaccination} />} />
-        <Route path="/schedule" element={<ScheduleModule schedules={schedules} residents={residents} onAddSchedule={handleAddSchedule} onUpdateStatus={handleUpdateScheduleStatus} />} />
-        <Route path="/inventory" element={<InventoryModule supplies={supplies} onRestock={handleRestock} />} />
-        <Route path="/reports" element={<ReportsModule residents={residents} schedules={schedules} supplies={supplies} monthlyVaxData={monthlyVaxData} />} />
-        <Route path="/portal" element={<ResidentPortal residents={residents} schedules={schedules} supplies={supplies} defaultResidentId={user.role === "resident" ? user.residentId : undefined} />} />
-        <Route path="/notifications" element={<NotificationsModule notifications={notifications} onMarkRead={handleMarkNotificationRead} onMarkAllRead={handleMarkAllRead} />} />
-        <Route path="/timeline" element={<HealthHistoryTimeline residents={residents} schedules={schedules} />} />
-        <Route path="/family" element={<FamilyHealthDashboard residents={residents} />} />
-        <Route path="/priority" element={<PriorityPatients residents={residents} schedules={schedules} />} />
-        <Route path="/certificate" element={<VaccinationCertificate residents={residents} />} />
-        <Route path="/batches" element={<BatchTracking residents={residents} supplies={supplies} />} />
-        {user.role === "admin" && (
-          <Route path="/users" element={<UsersModule users={users} onUsersChange={() => { if (user?.role === 'admin') usersApi.list().then(setUsers); }} currentUser={user} />} />
-        )}
-        
-        <Route path="*" element={<Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />} />
-      </Route>
+          <Route
+            path="/residents"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <ResidentsModule residents={residents} schedules={schedules} onAddResident={handleAddResident} />
+              )
+            }
+          />
+          <Route
+            path="/vaccinations"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <VaccinationsModule residents={residents} supplies={supplies} onRecordVaccination={handleRecordVaccination} />
+              )
+            }
+          />
+          <Route
+            path="/schedule"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <ScheduleModule schedules={schedules} residents={residents} onAddSchedule={handleAddSchedule} onUpdateStatus={handleUpdateScheduleStatus} />
+              )
+            }
+          />
+          <Route
+            path="/inventory"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <InventoryModule supplies={supplies} onRestock={handleRestock} />
+              )
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <ReportsModule residents={residents} schedules={schedules} supplies={supplies} monthlyVaxData={monthlyVaxData} />
+              )
+            }
+          />
+          <Route
+            path="/messaging"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <MessagingModule residents={residents} schedules={schedules} currentUser={user} />
+              )
+            }
+          />
+          <Route
+            path="/timeline"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <HealthHistoryTimeline residents={residents} schedules={schedules} />
+              )
+            }
+          />
+          <Route
+            path="/family"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <FamilyHealthDashboard residents={residents} />
+              )
+            }
+          />
+          <Route
+            path="/priority"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <PriorityPatients residents={residents} schedules={schedules} />
+              )
+            }
+          />
+          <Route
+            path="/certificate"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <VaccinationCertificate residents={residents} />
+              )
+            }
+          />
+          <Route
+            path="/batches"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <BatchTracking residents={residents} supplies={supplies} />
+              )
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              user.role === "resident" ? (
+                <Navigate to="/portal" replace />
+              ) : (
+                <NotificationsModule notifications={notifications} onMarkRead={handleMarkNotificationRead} onMarkAllRead={handleMarkAllRead} />
+              )
+            }
+          />
+
+          {user.role === "admin" && (
+            <Route
+              path="/users"
+              element={
+                <UsersModule users={users} onUsersChange={() => { if (user?.role === 'admin') usersApi.list().then(setUsers); }} currentUser={user} />
+              }
+            />
+          )}
+
+          {/* Resident Portal (accessible to residents and staff) */}
+          <Route
+            path="/portal"
+            element={
+              <ResidentPortal
+                residents={residents}
+                schedules={schedules}
+                supplies={supplies}
+                defaultResidentId={user.role === "resident" ? user.residentId : undefined}
+              />
+            }
+          />
+
+          {/* Catch-all for authenticated session */}
+          <Route path="*" element={<Navigate to={user.role === "resident" ? "/portal" : "/dashboard"} replace />} />
+        </Route>
+      ) : (
+        /* If unauthenticated and accessing protected routes, redirect to appropriate login */
+        <>
+          <Route path="/portal" element={<Navigate to="/resident/login" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/staff/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </>
+      )}
     </Routes>
   );
 }

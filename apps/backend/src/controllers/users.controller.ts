@@ -9,7 +9,7 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
     `SELECT id, username, display_name, role, avatar, title, created_at FROM users WHERE role IN ('admin', 'worker') ORDER BY created_at ASC`
   );
   
-  const mapped = rows.map(r => ({
+  const mapped = rows.map((r: any) => ({
     id: r.id,
     username: r.username,
     displayName: r.display_name,

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Syringe, Eye, AlertTriangle, RefreshCw, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Syringe, Eye, AlertTriangle, RefreshCw, ShieldCheck, ArrowLeft, Users } from "lucide-react";
 import { authApi, setToken, ApiClientError } from "../lib/api";
 import { AuthUser } from "../lib/types";
 import { getRecaptchaToken } from "../lib/recaptcha";
@@ -7,8 +8,8 @@ import { RecaptchaLegalNotice } from "../components/RecaptchaLegalNotice";
 
 const AUTH_USER_KEY = "vaxcare_user";
 
-export function LoginScreen({ onLogin }: { onLogin: (user: AuthUser) => void }) {
-  const [tab, setTab] = useState<"staff" | "resident">("staff");
+export function LoginScreen({ onLogin, initialTab = "staff" }: { onLogin: (user: AuthUser) => void; initialTab?: "staff" | "resident" }) {
+  const [tab, setTab] = useState<"staff" | "resident">(initialTab);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -61,6 +62,13 @@ export function LoginScreen({ onLogin }: { onLogin: (user: AuthUser) => void }) 
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+      <div className="w-full max-w-md mb-4 flex items-center justify-between text-xs text-muted-foreground">
+        <Link to="/" className="inline-flex items-center gap-1.5 hover:text-primary transition-colors font-semibold">
+          <ArrowLeft size={14} /> Back to Home
+        </Link>
+        <span className="font-mono text-[10px] text-muted-foreground">Portal Access</span>
+      </div>
+
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

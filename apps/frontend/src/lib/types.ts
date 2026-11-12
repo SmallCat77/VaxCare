@@ -20,7 +20,20 @@ export interface User {
   createdAt: string;
 }
 
-export type Module = "dashboard" | "residents" | "vaccinations" | "schedule" | "inventory" | "reports" | "portal" | "notifications" | "timeline" | "family" | "priority" | "certificate" | "batches" | "users";
+export type Module = "dashboard" | "residents" | "vaccinations" | "schedule" | "inventory" | "reports" | "portal" | "notifications" | "timeline" | "family" | "priority" | "certificate" | "batches" | "users" | "messaging";
+
+export interface SmsMessage {
+  id: string;
+  recipientPhone: string;
+  recipientName?: string;
+  residentId?: string;
+  message: string;
+  category: "reminder" | "followup" | "broadcast" | "general" | "certificate";
+  sentBy: string;
+  sentAt: string;
+  status: "Delivered" | "Sent" | "Failed";
+  purok?: string;
+}
 
 export interface Resident {
   id: string;

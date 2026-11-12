@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Download, AlertTriangle, RefreshCw } from "lucide-react";
+import { Download, AlertTriangle, RefreshCw, Package, X, Check, Shield } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { MedicalSupply } from "../lib/types";
@@ -65,18 +65,82 @@ export function InventoryModule({ supplies, onRestock }: { supplies: MedicalSupp
       )}
 
       {showRestock && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-lg border border-border w-full max-w-xs shadow-xl p-6">
-            <h3 className="font-semibold text-foreground mb-1">Restock Item</h3>
-            <p className="text-xs text-muted-foreground mb-4">{supplies.find(s => s.id === showRestock)?.name}</p>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">Units to Add</label>
-              <input type="number" value={restockQty} onChange={e => setRestockQty(e.target.value)} className="w-full bg-input-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+        <div className="fixed inset-0 bg-[#0A1E2F]/65 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-sm overflow-hidden ring-1 ring-slate-900/10" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {/* Clinical Header */}
+            <div className="bg-gradient-to-r from-[#0A1E2F] to-[#0E2E42] px-6 py-4 border-b border-[#163247] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D97706] to-[#F59E0B] flex items-center justify-center text-white shadow-md shadow-amber-950/40 shrink-0">
+                  <Package size={18} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-extrabold text-white tracking-tight">Restock Vaccine Lot</h3>
+                    <span className="text-[9px] font-mono font-bold bg-[#112C40] text-[#38BDF8] border border-[#164E63] px-1.5 py-0.2 rounded uppercase">Supply</span>
+                  </div>
+                  <p className="text-[11px] text-[#8FAEC5] font-medium mt-0.5">Cold Chain Storage · Central Formulary</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowRestock(null)}
+                className="text-[#8FAEC5] hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors"
+                title="Close"
+              >
+                <X size={16} />
+              </button>
             </div>
-            {restockError && <p className="text-xs text-red-600 mt-2">{restockError}</p>}
-            <div className="flex gap-2 mt-4">
-              <button onClick={() => setShowRestock(null)} className="flex-1 px-4 py-2 text-sm rounded-md border border-border text-foreground hover:bg-muted">Cancel</button>
-              <button disabled={restocking} onClick={() => restock(showRestock)} className="flex-1 px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">{restocking ? "Restocking…" : "Restock"}</button>
+
+            {/* Body */}
+            <div className="p-6 space-y-4">
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Target Vaccine Item</p>
+                <p className="text-sm font-extrabold text-slate-900 mt-0.5">{supplies.find(s => s.id === showRestock)?.name}</p>
+                <p className="text-xs text-slate-500 mt-0.5">Current Stock: <span className="font-mono font-bold text-slate-800">{supplies.find(s => s.id === showRestock)?.quantity} units</span></p>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide block mb-1.5">
+                  Vials / Units Received <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={restockQty}
+                  onChange={e => setRestockQty(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0B7065]/20 focus:border-[#0B7065] focus:bg-white transition-all"
+                />
+              </div>
+
+              {restockError && (
+                <div className="bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold p-3 rounded-lg">
+                  {restockError}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 flex items-center gap-1 font-medium">
+                <Shield size={12} className="text-[#0B7065]" />
+                Inventory Logged
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowRestock(null)}
+                  className="px-4 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 rounded-lg transition-colors shadow-2xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  disabled={restocking}
+                  onClick={() => restock(showRestock)}
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#0B7065] to-[#0E8376] hover:from-[#095C53] hover:to-[#0B7065] rounded-lg transition-all shadow-sm shadow-teal-950/20 disabled:opacity-50"
+                >
+                  <Check size={13} />
+                  <span>{restocking ? "Updating..." : "Confirm Restock"}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
