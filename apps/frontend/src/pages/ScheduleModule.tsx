@@ -213,16 +213,16 @@ export function ScheduleModule({ schedules, residents, onAddSchedule, onUpdateSt
       )}
 
       {missed.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-5">
+        <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-lg p-4 mb-5">
           <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle size={14} className="text-red-500" />
-            <h4 className="text-sm font-semibold text-red-700">Missed Appointments ({missed.length})</h4>
+            <AlertTriangle size={14} className="text-red-600 dark:text-red-400" />
+            <h4 className="text-sm font-semibold text-red-800 dark:text-red-200">Missed Appointments ({missed.length})</h4>
           </div>
           <div className="space-y-1.5">
             {missed.map(s => (
-              <div key={s.id} className="flex items-center justify-between text-xs text-red-700 bg-red-100/60 rounded px-3 py-2">
+              <div key={s.id} className="flex items-center justify-between text-xs text-red-800 dark:text-red-200 bg-red-100/70 dark:bg-red-900/40 rounded px-3 py-2 font-medium">
                 <span>{s.residentName} — {s.appointmentType} {s.details ? `(${s.details})` : ''}</span>
-                <span className="font-mono">{s.scheduledDate}</span>
+                <span className="font-mono font-semibold">{s.scheduledDate}</span>
               </div>
             ))}
           </div>

@@ -44,21 +44,21 @@ export function InventoryModule({ supplies, onRestock }: { supplies: MedicalSupp
       {(critical.length > 0 || low.length > 0) && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
           {critical.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3.5">
+            <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-lg p-3.5">
               <div className="flex items-center gap-2 mb-1.5">
-                <AlertTriangle size={14} className="text-red-500" />
-                <span className="text-sm font-semibold text-red-700">Critical Stock</span>
+                <AlertTriangle size={14} className="text-red-600 dark:text-red-400" />
+                <span className="text-sm font-bold text-red-800 dark:text-red-200">Critical Stock</span>
               </div>
-              {critical.map(s => <p key={s.id} className="text-xs text-red-600">{s.name}: <span className="font-mono font-bold">{s.quantity}</span> / {s.minStock} min</p>)}
+              {critical.map(s => <p key={s.id} className="text-xs text-red-700 dark:text-red-300 font-medium">{s.name}: <span className="font-mono font-bold">{s.quantity}</span> / {s.minStock} min</p>)}
             </div>
           )}
           {low.length > 0 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3.5">
+            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-lg p-3.5">
               <div className="flex items-center gap-2 mb-1.5">
-                <AlertTriangle size={14} className="text-amber-500" />
-                <span className="text-sm font-semibold text-amber-700">Low Stock</span>
+                <AlertTriangle size={14} className="text-amber-600 dark:text-amber-400" />
+                <span className="text-sm font-bold text-amber-800 dark:text-amber-200">Low Stock</span>
               </div>
-              {low.map(s => <p key={s.id} className="text-xs text-amber-600">{s.name}: <span className="font-mono font-bold">{s.quantity}</span> / {s.minStock} min</p>)}
+              {low.map(s => <p key={s.id} className="text-xs text-amber-700 dark:text-amber-300 font-medium">{s.name}: <span className="font-mono font-bold">{s.quantity}</span> / {s.minStock} min</p>)}
             </div>
           )}
         </div>
@@ -163,17 +163,17 @@ export function InventoryModule({ supplies, onRestock }: { supplies: MedicalSupp
           <h3 className="text-sm font-semibold text-foreground mb-4">Stock Summary</h3>
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="bg-red-50 rounded-lg p-3">
-                <p className="text-xl font-bold text-red-600">{critical.length}</p>
-                <p className="text-xs text-red-600 mt-0.5">Critical</p>
+              <div className="bg-red-50 dark:bg-red-950/40 border border-red-200/70 dark:border-red-900/60 rounded-lg p-3">
+                <p className="text-xl font-bold text-red-700 dark:text-red-300">{critical.length}</p>
+                <p className="text-xs font-medium text-red-700 dark:text-red-300 mt-0.5">Critical</p>
               </div>
-              <div className="bg-amber-50 rounded-lg p-3">
-                <p className="text-xl font-bold text-amber-600">{low.length}</p>
-                <p className="text-xs text-amber-600 mt-0.5">Low Stock</p>
+              <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-900/60 rounded-lg p-3">
+                <p className="text-xl font-bold text-amber-700 dark:text-amber-300">{low.length}</p>
+                <p className="text-xs font-medium text-amber-700 dark:text-amber-300 mt-0.5">Low Stock</p>
               </div>
-              <div className="bg-emerald-50 rounded-lg p-3">
-                <p className="text-xl font-bold text-emerald-600">{supplies.length - critical.length - low.length}</p>
-                <p className="text-xs text-emerald-600 mt-0.5">Adequate</p>
+              <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-900/60 rounded-lg p-3">
+                <p className="text-xl font-bold text-emerald-700 dark:text-emerald-300">{supplies.length - critical.length - low.length}</p>
+                <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mt-0.5">Adequate</p>
               </div>
             </div>
             <div className="space-y-1.5 pt-2">

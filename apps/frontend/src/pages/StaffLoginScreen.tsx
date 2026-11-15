@@ -146,26 +146,26 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
           </form>
 
           {/* Demo Credentials Quick Fill */}
-          <div className="mt-5 pt-4 border-t border-slate-100">
-            <p className="text-[11px] font-semibold text-slate-500 mb-2 flex items-center gap-1.5">
+          <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#193347]">
+            <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-2 flex items-center gap-1.5">
               <KeyRound size={12} /> Demo Staff Credentials:
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => fillDemoStaff("admin", "admin2025")}
-                className="text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                className="text-left p-2 rounded-lg bg-slate-50 dark:bg-[#091B27] hover:bg-slate-100 dark:hover:bg-[#112C3F] border border-slate-200 dark:border-[#193347] transition-colors text-xs"
               >
-                <p className="font-semibold text-slate-900">admin</p>
-                <p className="text-[10px] text-slate-500 font-mono">admin2025 · BHO Officer</p>
+                <p className="font-semibold text-slate-900 dark:text-white">admin</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-300 font-mono">admin2025 · BHO Officer</p>
               </button>
               <button
                 type="button"
                 onClick={() => fillDemoStaff("ana.reyes", "health123")}
-                className="text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                className="text-left p-2 rounded-lg bg-slate-50 dark:bg-[#091B27] hover:bg-slate-100 dark:hover:bg-[#112C3F] border border-slate-200 dark:border-[#193347] transition-colors text-xs"
               >
-                <p className="font-semibold text-slate-900">ana.reyes</p>
-                <p className="text-[10px] text-slate-500 font-mono">health123 · RN Staff</p>
+                <p className="font-semibold text-slate-900 dark:text-white">ana.reyes</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-300 font-mono">health123 · RN Staff</p>
               </button>
             </div>
           </div>
@@ -173,15 +173,15 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
 
         {/* Switch to Resident Access */}
         <div className="mt-4 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-600 dark:text-slate-300">
             Are you a barangay resident or patient?{" "}
-            <Link to="/resident/login" className="font-semibold text-[#0B7065] hover:underline">
+            <Link to="/resident/login" className="font-semibold text-[#0B7065] dark:text-teal-400 hover:underline">
               Access Resident Portal →
             </Link>
           </p>
         </div>
 
-        <p className="text-center text-[11px] text-slate-400 mt-5">
+        <p className="text-center text-[11px] text-slate-500 dark:text-slate-400 mt-5">
           VaxCare Healthcare System · Barangay Health Center · {new Date().getFullYear()}
         </p>
       </div>

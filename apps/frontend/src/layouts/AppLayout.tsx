@@ -43,9 +43,9 @@ export const MODULE_TITLE: Record<Module, string> = {
 };
 
 export const ROLE_BADGE: Record<UserRole, string> = {
-  admin: "bg-primary/20 text-primary",
-  worker: "bg-blue-100 text-blue-700",
-  resident: "bg-teal-100 text-teal-700",
+  admin: "bg-primary/20 text-primary dark:bg-teal-950/70 dark:text-teal-300",
+  worker: "bg-blue-100 text-blue-700 dark:bg-sky-950/70 dark:text-sky-300",
+  resident: "bg-teal-100 text-teal-700 dark:bg-teal-950/70 dark:text-teal-300",
 };
 
 interface AppLayoutProps {
@@ -73,7 +73,7 @@ export function AppLayout({ user, unreadCount, dataLoading, dataError, onLogout,
   const advancedItems = visibleNav.filter(i => ["timeline", "family", "priority", "certificate", "batches"].includes(i.id));
 
   return (
-    <div className="flex h-screen bg-[#F4F7FA] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="flex h-screen bg-[#F4F7FA] dark:bg-[#07131D] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-20 lg:hidden backdrop-blur-xs" onClick={() => setSidebarOpen(false)} />}
 
       {/* Hospital Clinical Sidebar */}

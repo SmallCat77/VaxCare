@@ -71,11 +71,11 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
       <div className="w-full max-w-md">
         {/* Header Card */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center mx-auto mb-3 text-[#0B7065] shadow-2xs">
+          <div className="w-12 h-12 rounded-xl bg-teal-50 dark:bg-[#0C1D2B] border border-teal-100 dark:border-[#193347] flex items-center justify-center mx-auto mb-3 text-[#0B7065] dark:text-teal-400 shadow-2xs">
             <ShieldCheck size={24} />
           </div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Resident Health Portal</h1>
-          <p className="text-xs text-slate-500 mt-1 font-normal">
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Resident Health Portal</h1>
+          <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 font-normal">
             Access your personal vaccination records, appointments, & digital certificates
           </p>
         </div>
@@ -139,33 +139,33 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
           </form>
 
           {/* Demo Profiles Quick Fill */}
-          <div className="mt-5 pt-4 border-t border-slate-100">
-            <p className="text-[11px] font-semibold text-slate-500 mb-2 flex items-center gap-1.5">
+          <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#193347]">
+            <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-2 flex items-center gap-1.5">
               Demo Resident Profiles:
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => fillDemoResident("R001", "1990-03-15")}
-                className="text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                className="text-left p-2 rounded-lg bg-slate-50 dark:bg-[#091B27] hover:bg-slate-100 dark:hover:bg-[#112C3F] border border-slate-200 dark:border-[#193347] transition-colors text-xs"
               >
-                <p className="font-semibold text-slate-900">Maria Santos</p>
-                <p className="text-[10px] text-slate-500 font-mono">R001 · 1990-03-15</p>
+                <p className="font-semibold text-slate-900 dark:text-white">Maria Santos</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-300 font-mono">R001 · 1990-03-15</p>
               </button>
               <button
                 type="button"
                 onClick={() => fillDemoResident("R002", "1979-07-22")}
-                className="text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-xs"
+                className="text-left p-2 rounded-lg bg-slate-50 dark:bg-[#091B27] hover:bg-slate-100 dark:hover:bg-[#112C3F] border border-slate-200 dark:border-[#193347] transition-colors text-xs"
               >
-                <p className="font-semibold text-slate-900">Jose dela Cruz</p>
-                <p className="text-[10px] text-slate-500 font-mono">R002 · 1979-07-22</p>
+                <p className="font-semibold text-slate-900 dark:text-white">Jose dela Cruz</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-300 font-mono">R002 · 1979-07-22</p>
               </button>
             </div>
           </div>
 
           {/* Help box */}
-          <div className="mt-4 bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex items-start gap-2 text-[11px] text-slate-500">
-            <HelpCircle size={14} className="text-slate-400 shrink-0 mt-0.5" />
+          <div className="mt-4 bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-lg p-2.5 flex items-start gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+            <HelpCircle size={14} className="text-slate-500 dark:text-slate-400 shrink-0 mt-0.5" />
             <p>
               Don't know your Resident ID? Visit the health center or ask your Purok Leader to look it up.
             </p>
@@ -174,15 +174,15 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
 
         {/* Switch to Staff Access */}
         <div className="mt-4 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-600 dark:text-slate-300">
             Healthcare worker or administrator?{" "}
-            <Link to="/staff/login" className="font-semibold text-slate-900 hover:text-[#0B7065] transition-colors">
+            <Link to="/staff/login" className="font-semibold text-slate-900 dark:text-white hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">
               Go to Staff Login →
             </Link>
           </p>
         </div>
 
-        <p className="text-center text-[11px] text-slate-400 mt-5">
+        <p className="text-center text-[11px] text-slate-500 dark:text-slate-400 mt-5">
           VaxCare Healthcare System · Barangay Health Center · {new Date().getFullYear()}
         </p>
       </div>

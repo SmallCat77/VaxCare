@@ -30,9 +30,9 @@ export function FamilyHealthDashboard({ residents }: { residents: Resident[] }) 
   }, [residents]);
 
   const riskStyle: Record<string, string> = {
-    "High Risk": "bg-red-100 text-red-700",
-    "Moderate": "bg-amber-100 text-amber-700",
-    "Protected": "bg-emerald-100 text-emerald-700",
+    "High Risk": "bg-red-100 text-red-800 dark:bg-red-950/70 dark:text-red-300 border border-red-200/60 dark:border-red-800/60",
+    "Moderate": "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60",
+    "Protected": "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60",
   };
 
   return (

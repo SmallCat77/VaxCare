@@ -24,11 +24,11 @@ export function PriorityPatients({ residents, schedules }: { residents: Resident
     }).filter(r => r.score > 0).sort((a, b) => b.score - a.score);
   }, [residents, schedules]);
 
-  const levelStyle: Record<string, { badge: string; bar: string; border: string }> = {
-    Critical: { badge: "bg-red-100 text-red-700", bar: "bg-red-500", border: "border-l-red-400" },
-    High: { badge: "bg-orange-100 text-orange-700", bar: "bg-orange-400", border: "border-l-orange-400" },
-    Medium: { badge: "bg-amber-100 text-amber-700", bar: "bg-amber-400", border: "border-l-amber-400" },
-    Low: { badge: "bg-blue-100 text-blue-700", bar: "bg-blue-400", border: "border-l-blue-400" },
+  const levelStyle: Record<string, { badge: string; text: string; bar: string; border: string }> = {
+    Critical: { badge: "bg-red-100 text-red-800 dark:bg-red-950/70 dark:text-red-300 border border-red-200/60 dark:border-red-800/60", text: "text-red-600 dark:text-red-400", bar: "bg-red-500", border: "border-l-red-400" },
+    High: { badge: "bg-orange-100 text-orange-800 dark:bg-orange-950/70 dark:text-orange-300 border border-orange-200/60 dark:border-orange-800/60", text: "text-orange-600 dark:text-orange-400", bar: "bg-orange-400", border: "border-l-orange-400" },
+    Medium: { badge: "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60", text: "text-amber-600 dark:text-amber-400", bar: "bg-amber-400", border: "border-l-amber-400" },
+    Low: { badge: "bg-blue-100 text-blue-800 dark:bg-sky-950/70 dark:text-sky-300 border border-blue-200/60 dark:border-sky-800/60", text: "text-blue-600 dark:text-sky-400", bar: "bg-blue-400", border: "border-l-blue-400" },
   };
 
   const counts = { Critical: 0, High: 0, Medium: 0, Low: 0 };
@@ -41,7 +41,7 @@ export function PriorityPatients({ residents, schedules }: { residents: Resident
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {(["Critical", "High", "Medium", "Low"] as const).map(lv => (
           <div key={lv} className={`rounded-lg p-3.5 border-l-4 bg-card border border-border ${levelStyle[lv].border}`}>
-            <p className={`text-2xl font-bold ${levelStyle[lv].badge.split(" ")[1]}`}>{counts[lv]}</p>
+            <p className={`text-2xl font-bold ${levelStyle[lv].text}`}>{counts[lv]}</p>
             <p className="text-xs text-muted-foreground mt-0.5">{lv} Priority</p>
           </div>
         ))}

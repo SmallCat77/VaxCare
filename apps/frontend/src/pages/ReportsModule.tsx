@@ -40,13 +40,13 @@ export function ReportsModule({ residents, schedules, supplies, monthlyVaxData }
       {activeReport === "coverage" && (
         <div className="space-y-5">
           <div className="grid grid-cols-3 gap-4">
-            {[["Fully Vaccinated", residents.filter(r => r.status === "Fully Vaccinated").length, "text-emerald-600", "bg-emerald-50"],
-              ["Partially Vaccinated", residents.filter(r => r.status === "Partially Vaccinated").length, "text-amber-600", "bg-amber-50"],
-              ["Unvaccinated", residents.filter(r => r.status === "Unvaccinated").length, "text-red-600", "bg-red-50"]].map(([label, count, tc, bg]) => (
+            {[["Fully Vaccinated", residents.filter(r => r.status === "Fully Vaccinated").length, "text-emerald-700 dark:text-emerald-300", "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-900/60"],
+              ["Partially Vaccinated", residents.filter(r => r.status === "Partially Vaccinated").length, "text-amber-700 dark:text-amber-300", "bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-900/60"],
+              ["Unvaccinated", residents.filter(r => r.status === "Unvaccinated").length, "text-red-700 dark:text-red-300", "bg-red-50 dark:bg-red-950/40 border border-red-200/70 dark:border-red-900/60"]].map(([label, count, tc, bg]) => (
               <div key={label as string} className={`rounded-lg p-4 ${bg}`}>
                 <p className={`text-2xl font-bold ${tc}`}>{count as number}</p>
-                <p className={`text-xs mt-0.5 ${tc}`}>{label}</p>
-                <p className={`text-xs font-mono mt-1 ${tc}`}>{Math.round(count as number / residents.length * 100)}%</p>
+                <p className={`text-xs font-medium mt-0.5 ${tc}`}>{label}</p>
+                <p className={`text-xs font-mono font-semibold mt-1 ${tc}`}>{residents.length > 0 ? Math.round((count as number) / residents.length * 100) : 0}%</p>
               </div>
             ))}
           </div>
@@ -114,13 +114,13 @@ export function ReportsModule({ residents, schedules, supplies, monthlyVaxData }
 
       {activeReport === "schedule" && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[["Upcoming", schedules.filter(s => s.status === "Upcoming").length, "text-blue-600", "bg-blue-50"],
-            ["Completed", schedules.filter(s => s.status === "Completed").length, "text-emerald-600", "bg-emerald-50"],
-            ["Missed", schedules.filter(s => s.status === "Missed").length, "text-red-600", "bg-red-50"],
-            ["Total Scheduled", schedules.length, "text-foreground", "bg-muted"]].map(([label, count, tc, bg]) => (
+          {[["Upcoming", schedules.filter(s => s.status === "Upcoming").length, "text-blue-700 dark:text-sky-300", "bg-blue-50 dark:bg-sky-950/40 border border-blue-200/70 dark:border-sky-900/60"],
+            ["Completed", schedules.filter(s => s.status === "Completed").length, "text-emerald-700 dark:text-emerald-300", "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-900/60"],
+            ["Missed", schedules.filter(s => s.status === "Missed").length, "text-red-700 dark:text-red-300", "bg-red-50 dark:bg-red-950/40 border border-red-200/70 dark:border-red-900/60"],
+            ["Total Scheduled", schedules.length, "text-foreground", "bg-muted border border-border"]].map(([label, count, tc, bg]) => (
             <div key={label as string} className={`rounded-lg p-4 ${bg}`}>
               <p className={`text-2xl font-bold ${tc}`}>{count}</p>
-              <p className={`text-xs mt-0.5 ${tc}`}>{label}</p>
+              <p className={`text-xs font-medium mt-0.5 ${tc}`}>{label}</p>
             </div>
           ))}
         </div>

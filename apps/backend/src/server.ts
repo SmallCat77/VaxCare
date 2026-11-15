@@ -43,6 +43,11 @@ app.use(cors({
     // Exact origin match (e.g. https://vaxcare.vercel.app or http://localhost:5173)
     if (allowedOrigins.includes(origin)) return callback(null, true);
 
+    // Allow any localhost / 127.0.0.1 port in non-production local development
+    if (process.env.NODE_ENV !== "production" && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+
     // Optional environment-driven rule to support Vercel preview deployments (*.vercel.app)
     if (allowVercelPreviews && /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(origin)) {
       return callback(null, true);

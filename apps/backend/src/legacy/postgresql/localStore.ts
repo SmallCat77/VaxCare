@@ -187,12 +187,18 @@ export async function executeFallbackQuery(text: string, params: any[] = []): Pr
     return { rows: user ? [user] : [], rowCount: user ? 1 : 0 };
   }
 
-  // 4. List all users: SELECT id, username, display_name, role, avatar, title, created_at FROM users
-  if (norm.includes("FROM users")) {
+  // 4. List/modify users: SELECT / INSERT / UPDATE / DELETE FROM users
+  if (norm.includes("FROM users") || norm.startsWith("UPDATE users")) {
     if (norm.startsWith("SELECT")) {
       return { rows: [...localUsers], rowCount: localUsers.length };
     }
     if (norm.startsWith("INSERT INTO users")) {
+      const existing = localUsers.find(u => u.username.toLowerCase() === String(params[0]).toLowerCase());
+      if (existing) {
+        const dupErr: any = new Error("duplicate key value violates unique constraint");
+        dupErr.code = "23505";
+        throw dupErr;
+      }
       const newUser: LocalUser = {
         id: nextUserId++,
         username: params[0],
@@ -206,21 +212,39 @@ export async function executeFallbackQuery(text: string, params: any[] = []): Pr
       localUsers.push(newUser);
       return { rows: [newUser], rowCount: 1 };
     }
+    if (norm.startsWith("UPDATE users SET password_hash")) {
+      const u = localUsers.find(user => user.id === Number(params[1]));
+      if (u) u.password_hash = params[0];
+      return { rows: u ? [u] : [], rowCount: u ? 1 : 0 };
+    }
+    if (norm.startsWith("UPDATE users SET")) {
+      const u = localUsers.find(user => user.id === Number(params[4]));
+      if (u) {
+        u.display_name = params[0];
+        u.role = params[1];
+        u.title = params[2] || u.title;
+        u.avatar = params[3] || u.avatar;
+      }
+      return { rows: u ? [u] : [], rowCount: u ? 1 : 0 };
+    }
     if (norm.startsWith("DELETE FROM users WHERE id = $1")) {
       const idx = localUsers.findIndex(u => u.id === Number(params[0]));
-      if (idx !== -1) localUsers.splice(idx, 1);
-      return { rows: [], rowCount: 1 };
+      if (idx !== -1) {
+        localUsers.splice(idx, 1);
+        return { rows: [], rowCount: 1 };
+      }
+      return { rows: [], rowCount: 0 };
     }
   }
 
-  // 5. Resident login: SELECT id, name, birthdate FROM residents WHERE id = $1
+  // 5. Resident login / single resident: SELECT ... FROM residents WHERE id = $1
   if (norm.includes("FROM residents WHERE id = $1")) {
     const r = localResidents.find(res => res.id.toLowerCase() === String(params[0]).toLowerCase());
     return { rows: r ? [r] : [], rowCount: r ? 1 : 0 };
   }
 
-  // 6. List residents: SELECT * FROM residents ORDER BY name
-  if (norm.includes("FROM residents")) {
+  // 6. List / insert / update residents
+  if (norm.includes("FROM residents") || norm.startsWith("UPDATE residents")) {
     if (norm.startsWith("SELECT")) {
       return { rows: [...localResidents], rowCount: localResidents.length };
     }
@@ -240,29 +264,41 @@ export async function executeFallbackQuery(text: string, params: any[] = []): Pr
       localResidents.push(newRes);
       return { rows: [newRes], rowCount: 1 };
     }
+    if (norm.startsWith("UPDATE residents SET status = $1 WHERE id = $2")) {
+      const r = localResidents.find(res => res.id === params[1]);
+      if (r) r.status = params[0];
+      return { rows: r ? [r] : [], rowCount: r ? 1 : 0 };
+    }
+    if (norm.startsWith("UPDATE residents SET next_due = $1 WHERE id = $2")) {
+      const r = localResidents.find(res => res.id === params[1]);
+      if (r) r.next_due = params[0];
+      return { rows: r ? [r] : [], rowCount: r ? 1 : 0 };
+    }
     if (norm.startsWith("UPDATE residents SET")) {
       const id = params[params.length - 1];
       const r = localResidents.find(res => res.id === id);
       if (r) {
-        if (params[0]) r.name = params[0];
-        if (params[1]) r.age = Number(params[1]);
-        if (params[2]) r.gender = params[2];
-        if (params[3]) r.birthdate = params[3];
-        if (params[4]) r.address = params[4];
-        if (params[5]) r.phone = params[5];
-        if (params[6]) r.purok = params[6];
+        if (params[0] !== undefined) r.name = params[0];
+        if (params[1] !== undefined) r.age = Number(params[1]);
+        if (params[2] !== undefined) r.gender = params[2];
+        if (params[3] !== undefined) r.address = params[3];
+        if (params[4] !== undefined) r.phone = params[4];
+        if (params[5] !== undefined) r.purok = params[5];
       }
       return { rows: r ? [r] : [], rowCount: r ? 1 : 0 };
     }
   }
 
-  // 7. Vaccinations: SELECT * FROM vaccinations WHERE resident_id = $1
+  // 7. Vaccinations: COUNT or SELECT * FROM vaccinations WHERE resident_id = $1
   if (norm.includes("FROM vaccinations WHERE resident_id = $1")) {
     const list = localVaccinations.filter(v => v.resident_id.toLowerCase() === String(params[0]).toLowerCase());
+    if (norm.includes("COUNT(*)")) {
+      return { rows: [{ count: list.length }], rowCount: 1 };
+    }
     return { rows: list, rowCount: list.length };
   }
 
-  if (norm.includes("FROM vaccinations") && norm.startsWith("INSERT INTO vaccinations")) {
+  if (norm.startsWith("INSERT INTO vaccinations")) {
     const newVax: LocalVaccination = {
       id: nextVaxId++,
       resident_id: params[0],
@@ -275,7 +311,6 @@ export async function executeFallbackQuery(text: string, params: any[] = []): Pr
       created_at: new Date(),
     };
     localVaccinations.push(newVax);
-    // Also update resident status if needed
     const res = localResidents.find(r => r.id === newVax.resident_id);
     if (res && res.status === "Unvaccinated") {
       res.status = "Partially Vaccinated";
@@ -299,19 +334,28 @@ export async function executeFallbackQuery(text: string, params: any[] = []): Pr
     return { rows, rowCount: rows.length };
   }
 
-  // 9. Medical supplies: SELECT * FROM medical_supplies ORDER BY name
-  if (norm.includes("FROM medical_supplies")) {
+  // 9. Medical supplies: SELECT / UPDATE medical_supplies
+  if (norm.includes("FROM medical_supplies") || norm.startsWith("UPDATE medical_supplies")) {
+    if (norm.startsWith("SELECT") && norm.includes("WHERE id = $1")) {
+      const item = localSupplies.find(s => s.id === params[0]);
+      return { rows: item ? [item] : [], rowCount: item ? 1 : 0 };
+    }
     if (norm.startsWith("SELECT")) {
       return { rows: [...localSupplies], rowCount: localSupplies.length };
     }
-    if (norm.startsWith("UPDATE medical_supplies SET quantity = $1")) {
-      const qty = Number(params[0]);
-      const restocked = params[1];
-      const id = params[2];
+    if (norm.startsWith("UPDATE medical_supplies")) {
+      const id = params[params.length - 1];
       const item = localSupplies.find(s => s.id === id);
       if (item) {
-        item.quantity = qty;
-        item.last_restocked = restocked;
+        if (params[0] != null) item.quantity = Number(params[0]);
+        if (params.length >= 6) {
+          if (params[1] != null) item.min_stock = Number(params[1]);
+          if (params[2] != null) item.expiry_date = params[2];
+          if (params[3] != null) item.manufacturer = params[3];
+          if (params[4] != null) item.last_restocked = params[4];
+        } else if (params[1] != null) {
+          item.last_restocked = params[1];
+        }
       }
       return { rows: item ? [item] : [], rowCount: item ? 1 : 0 };
     }
