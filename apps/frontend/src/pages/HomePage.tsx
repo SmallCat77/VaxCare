@@ -89,8 +89,8 @@ export function HomePage({ user, onLogout }: HomePageProps) {
       answer: "Please bring any government-issued ID or Barangay Certificate proving residency. For children and infants, kindly bring their Baby Immunization Book (Mother and Child Health Record) so our nurses can update the physical record as well as the digital VaxCare system."
     },
     {
-      question: "How do I find my Resident ID for the Resident Portal?",
-      answer: "Your Resident ID (e.g. R001) is assigned during your barangay health profiling. If you do not have your ID handy, you can visit the health center or contact your designated Purok Health Leader who can quickly look up your assigned ID in our directory."
+      question: "How do I sign into the Resident Health Portal?",
+      answer: "You can sign in directly using your registered Gmail account and Date of Birth. If you are a new resident, you can easily self-register your profile online in seconds."
     },
     {
       question: "Can I download and print a digital vaccination certificate?",
@@ -269,7 +269,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                   <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
                     <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
-                    <span>Instant access with Resident ID & Birthdate</span>
+                    <span>Instant access with Gmail account & birthdate</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
                     <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
@@ -511,7 +511,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
               <span className="font-mono text-xs font-extrabold text-[#0B7065] dark:text-teal-400 block mb-2 tracking-wider">STEP 01</span>
               <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Look Up or Register</h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Check if you already have a Resident ID in our system, or register with your Purok Health Leader with a valid ID.
+                Register your health profile online with your Gmail account or at the health center.
               </p>
             </div>
 

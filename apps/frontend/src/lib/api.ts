@@ -33,6 +33,7 @@ interface FallbackStore {
   users: Array<{
     id: number;
     username: string;
+    email?: string;
     password: string;
     display_name: string;
     role: "admin" | "worker";
@@ -43,6 +44,7 @@ interface FallbackStore {
   residents: Array<{
     id: string;
     name: string;
+    email?: string;
     age: number;
     gender: string;
     birthdate: string;
@@ -96,21 +98,21 @@ function getDefaultFallbackStore(): FallbackStore {
   const now = new Date().toISOString();
   return {
     users: [
-      { id: 1, username: "admin", password: "admin2025", display_name: "Dr. Pedro Cruz", role: "admin", avatar: "P", title: "Barangay Health Officer", created_at: now },
-      { id: 2, username: "ana.reyes", password: "health123", display_name: "RN Ana Reyes", role: "worker", avatar: "A", title: "Registered Nurse", created_at: now },
-      { id: 3, username: "luz.garcia", password: "health123", display_name: "RN Luz Garcia", role: "worker", avatar: "L", title: "Registered Nurse", created_at: now },
+      { id: 1, username: "admin@gmail.com", email: "admin@gmail.com", password: "admin2025", display_name: "Dr. Pedro Cruz", role: "admin", avatar: "P", title: "Barangay Health Officer", created_at: now },
+      { id: 2, username: "ana.reyes@gmail.com", email: "ana.reyes@gmail.com", password: "health123", display_name: "RN Ana Reyes", role: "worker", avatar: "A", title: "Registered Nurse", created_at: now },
+      { id: 3, username: "luz.garcia@gmail.com", email: "luz.garcia@gmail.com", password: "health123", display_name: "RN Luz Garcia", role: "worker", avatar: "L", title: "Registered Nurse", created_at: now },
     ],
     residents: [
-      { id: "R001", name: "Maria Santos", age: 34, gender: "Female", birthdate: "1990-03-15", address: "123 Sampaguita St.", phone: "09171234567", purok: "Purok 1", status: "Fully Vaccinated", next_due: null },
-      { id: "R002", name: "Jose dela Cruz", age: 45, gender: "Male", birthdate: "1979-07-22", address: "45 Rizal Ave.", phone: "09282345678", purok: "Purok 2", status: "Partially Vaccinated", next_due: "2025-07-22" },
-      { id: "R003", name: "Ana Reyes", age: 28, gender: "Female", birthdate: "1996-11-08", address: "78 Mabini Blvd.", phone: "09393456789", purok: "Purok 1", status: "Fully Vaccinated", next_due: null },
-      { id: "R004", name: "Carlos Mendoza", age: 62, gender: "Male", birthdate: "1962-05-30", address: "9 Aguinaldo Rd.", phone: "09504567890", purok: "Purok 3", status: "Partially Vaccinated", next_due: "2025-08-15" },
-      { id: "R005", name: "Luisa Torres", age: 19, gender: "Female", birthdate: "2005-12-01", address: "56 Luna St.", phone: "09615678901", purok: "Purok 2", status: "Unvaccinated", next_due: "2025-07-10" },
-      { id: "R006", name: "Ramon Villanueva", age: 55, gender: "Male", birthdate: "1969-08-14", address: "32 Bonifacio St.", phone: "09726789012", purok: "Purok 4", status: "Fully Vaccinated", next_due: null },
-      { id: "R007", name: "Gloria Aquino", age: 41, gender: "Female", birthdate: "1983-04-17", address: "11 Magsaysay Blvd.", phone: "09837890123", purok: "Purok 3", status: "Partially Vaccinated", next_due: "2025-07-30" },
-      { id: "R008", name: "Ernesto Lim", age: 70, gender: "Male", birthdate: "1954-01-23", address: "88 Quezon Ave.", phone: "09948901234", purok: "Purok 5", status: "Fully Vaccinated", next_due: null },
-      { id: "R009", name: "Precy Abad", age: 25, gender: "Female", birthdate: "2000-06-11", address: "22 Pasig Rd.", phone: "09159012345", purok: "Purok 1", status: "Unvaccinated", next_due: "2025-07-15" },
-      { id: "R010", name: "Roberto Castillo", age: 38, gender: "Male", birthdate: "1986-09-28", address: "67 Taft Ave.", phone: "09260123456", purok: "Purok 4", status: "Partially Vaccinated", next_due: "2025-08-01" },
+      { id: "R001", name: "Maria Santos", email: "maria.santos@gmail.com", age: 34, gender: "Female", birthdate: "1990-03-15", address: "123 Sampaguita St.", phone: "09171234567", purok: "Purok 1", status: "Fully Vaccinated", next_due: null },
+      { id: "R002", name: "Jose dela Cruz", email: "jose.delacruz@gmail.com", age: 45, gender: "Male", birthdate: "1979-07-22", address: "45 Rizal Ave.", phone: "09282345678", purok: "Purok 2", status: "Partially Vaccinated", next_due: "2025-07-22" },
+      { id: "R003", name: "Ana Reyes", email: "ana.reyes.citizen@gmail.com", age: 28, gender: "Female", birthdate: "1996-11-08", address: "78 Mabini Blvd.", phone: "09393456789", purok: "Purok 1", status: "Fully Vaccinated", next_due: null },
+      { id: "R004", name: "Carlos Mendoza", email: "carlos.mendoza@gmail.com", age: 62, gender: "Male", birthdate: "1962-05-30", address: "9 Aguinaldo Rd.", phone: "09504567890", purok: "Purok 3", status: "Partially Vaccinated", next_due: "2025-08-15" },
+      { id: "R005", name: "Luisa Torres", email: "luisa.torres@gmail.com", age: 19, gender: "Female", birthdate: "2005-12-01", address: "56 Luna St.", phone: "09615678901", purok: "Purok 2", status: "Unvaccinated", next_due: "2025-07-10" },
+      { id: "R006", name: "Ramon Villanueva", email: "ramon.villanueva@gmail.com", age: 55, gender: "Male", birthdate: "1969-08-14", address: "32 Bonifacio St.", phone: "09726789012", purok: "Purok 4", status: "Fully Vaccinated", next_due: null },
+      { id: "R007", name: "Gloria Aquino", email: "gloria.aquino@gmail.com", age: 41, gender: "Female", birthdate: "1983-04-17", address: "11 Magsaysay Blvd.", phone: "09837890123", purok: "Purok 3", status: "Partially Vaccinated", next_due: "2025-07-30" },
+      { id: "R008", name: "Ernesto Lim", email: "ernesto.lim@gmail.com", age: 70, gender: "Male", birthdate: "1954-01-23", address: "88 Quezon Ave.", phone: "09948901234", purok: "Purok 5", status: "Fully Vaccinated", next_due: null },
+      { id: "R009", name: "Precy Abad", email: "precy.abad@gmail.com", age: 25, gender: "Female", birthdate: "2000-06-11", address: "22 Pasig Rd.", phone: "09159012345", purok: "Purok 1", status: "Unvaccinated", next_due: "2025-07-15" },
+      { id: "R010", name: "Roberto Castillo", email: "roberto.castillo@gmail.com", age: 38, gender: "Male", birthdate: "1986-09-28", address: "67 Taft Ave.", phone: "09260123456", purok: "Purok 4", status: "Partially Vaccinated", next_due: "2025-08-01" },
     ],
     vaccinations: [
       { id: 1, resident_id: "R001", vaccine: "COVID-19 Bivalent", dose: "Booster", date: "2024-11-10", worker: "RN Ana Reyes", batch_no: "BV-2024-001", site: "Left Arm" },
@@ -185,20 +187,20 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
 
   // 1. Staff Login: POST /auth/login
   if (path === "/auth/login" && method === "POST") {
-    const { username, password } = body;
-    if (!username || !password) {
-      throw new ApiClientError(400, "username and password are required");
+    const identifier = String(body.email || body.username || "").trim().toLowerCase();
+    if (!identifier || !body.password) {
+      throw new ApiClientError(400, "Gmail address and password are required");
     }
     const u = store.users.find(
-      (user) => user.username.toLowerCase() === String(username).toLowerCase() && user.password === password
+      (user) => (user.username.toLowerCase() === identifier || (user.email && user.email.toLowerCase() === identifier)) && user.password === body.password
     );
     if (!u) {
-      throw new ApiClientError(401, "Invalid username or password");
+      throw new ApiClientError(401, "Invalid Gmail address or password");
     }
     return {
       token: `local-jwt-${u.id}-${Date.now()}`,
       user: {
-        username: u.username,
+        username: u.email || u.username,
         displayName: u.display_name,
         role: u.role,
         avatar: u.avatar,
@@ -209,20 +211,20 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
 
   // 2. Resident Login: POST /auth/resident-login
   if (path === "/auth/resident-login" && method === "POST") {
-    const { residentId, birthdate } = body;
-    if (!residentId || !birthdate) {
-      throw new ApiClientError(400, "residentId and birthdate are required");
+    const identifier = String(body.email || body.residentId || "").trim().toLowerCase();
+    if (!identifier || !body.birthdate) {
+      throw new ApiClientError(400, "Gmail address and date of birth are required");
     }
     const r = store.residents.find(
-      (res) => res.id.toLowerCase() === String(residentId).toLowerCase() && res.birthdate.slice(0, 10) === String(birthdate).slice(0, 10)
+      (res) => (res.id.toLowerCase() === identifier || (res.email && res.email.toLowerCase() === identifier)) && res.birthdate.slice(0, 10) === String(body.birthdate).slice(0, 10)
     );
     if (!r) {
-      throw new ApiClientError(401, "Resident ID or birthdate not found");
+      throw new ApiClientError(401, "Gmail account or birthdate not found");
     }
     return {
       token: `local-jwt-${r.id}-${Date.now()}`,
       user: {
-        username: r.id,
+        username: r.email || r.id,
         displayName: r.name,
         role: "resident",
         residentId: r.id,
@@ -234,18 +236,20 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
 
   // 1b. Staff Register: POST /auth/register-staff
   if (path === "/auth/register-staff" && method === "POST") {
-    const { username, password, displayName, role = "worker", title } = body;
-    if (!username || !password || !displayName) {
-      throw new ApiClientError(400, "Username, password, and full name are required");
+    const { email, username, password, displayName, role = "worker", title } = body;
+    const staffEmail = String(email || username || "").trim().toLowerCase();
+    if (!staffEmail || !password || !displayName) {
+      throw new ApiClientError(400, "Gmail address, password, and full name are required");
     }
-    if (store.users.some((u) => u.username.toLowerCase() === String(username).toLowerCase())) {
-      throw new ApiClientError(409, "Username already registered");
+    if (store.users.some((u) => u.username.toLowerCase() === staffEmail || (u.email && u.email.toLowerCase() === staffEmail))) {
+      throw new ApiClientError(409, "This Gmail address is already registered as staff.");
     }
     const nextId = store.users.reduce((max, u) => Math.max(max, u.id), 0) + 1;
     const staffTitle = title || (role === "admin" ? "Barangay Health Officer" : "Registered Nurse");
     const newUser = {
       id: nextId,
-      username: String(username).trim(),
+      username: staffEmail,
+      email: staffEmail,
       password: String(password),
       display_name: String(displayName).trim(),
       role: (role === "admin" ? "admin" : "worker") as "admin" | "worker",
@@ -258,7 +262,7 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
     return {
       token: `local-jwt-${newUser.id}-${Date.now()}`,
       user: {
-        username: newUser.username,
+        username: newUser.email || newUser.username,
         displayName: newUser.display_name,
         role: newUser.role,
         avatar: newUser.avatar,
@@ -269,9 +273,13 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
 
   // 2b. Resident Register: POST /auth/register-resident
   if (path === "/auth/register-resident" && method === "POST") {
-    const { name, birthdate, age, gender = "Female", address = "", phone = "", purok = "Purok 1" } = body;
-    if (!name || !birthdate) {
-      throw new ApiClientError(400, "Full Name and Date of Birth are required");
+    const { name, email, birthdate, age, gender = "Female", address = "", phone = "", purok = "Purok 1" } = body;
+    const resEmail = String(email || "").trim().toLowerCase();
+    if (!name || !birthdate || !resEmail) {
+      throw new ApiClientError(400, "Full Name, Gmail address, and Date of Birth are required");
+    }
+    if (store.residents.some((r) => r.email && r.email.toLowerCase() === resEmail)) {
+      throw new ApiClientError(409, "A resident profile with this Gmail address is already registered. Please sign in instead.");
     }
     let nextNum = 1;
     store.residents.forEach((res) => {
@@ -293,6 +301,7 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
     const newResident = {
       id: newId,
       name: String(name).trim(),
+      email: resEmail,
       age: computedAge,
       gender: String(gender),
       birthdate: String(birthdate).slice(0, 10),
@@ -309,7 +318,7 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
       token: `local-jwt-${newResident.id}-${Date.now()}`,
       residentId: newResident.id,
       user: {
-        username: newResident.id,
+        username: newResident.email || newResident.id,
         displayName: newResident.name,
         role: "resident",
         residentId: newResident.id,
@@ -383,6 +392,7 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
       const newRes = {
         id: body.id,
         name: body.name,
+        email: body.email ? String(body.email).trim().toLowerCase() : "",
         age: Number(body.age) || 0,
         gender: body.gender || "Female",
         birthdate: body.birthdate,
@@ -621,6 +631,7 @@ export function normalizeResident(r: any) {
   return {
     id: r.id,
     name: r.name,
+    email: r.email ?? "",
     age: r.age,
     gender: r.gender,
     birthdate: typeof r.birthdate === "string" ? r.birthdate.slice(0, 10) : r.birthdate,
@@ -687,21 +698,23 @@ export function normalizeNotification(n: any) {
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 export const authApi = {
-  staffLogin: (username: string, password: string, recaptchaToken?: string) =>
+  staffLogin: (emailOrUsername: string, password: string, recaptchaToken?: string) =>
     request<{ token: string; user: any }>("/auth/login", {
       method: "POST",
       body: JSON.stringify({
-        username,
+        email: emailOrUsername,
+        username: emailOrUsername,
         password,
         "g-recaptcha-response": recaptchaToken,
         recaptchaToken,
       }),
     }),
-  residentLogin: (residentId: string, birthdate: string, recaptchaToken?: string) =>
+  residentLogin: (emailOrId: string, birthdate: string, recaptchaToken?: string) =>
     request<{ token: string; user: any }>("/auth/resident-login", {
       method: "POST",
       body: JSON.stringify({
-        residentId,
+        email: emailOrId,
+        residentId: emailOrId,
         birthdate,
         "g-recaptcha-response": recaptchaToken,
         recaptchaToken,
@@ -710,6 +723,7 @@ export const authApi = {
   registerResident: (
     data: {
       name: string;
+      email: string;
       birthdate: string;
       age?: number;
       gender?: string;
@@ -729,7 +743,8 @@ export const authApi = {
     }),
   registerStaff: (
     data: {
-      username: string;
+      email: string;
+      username?: string;
       password: string;
       displayName: string;
       role?: "admin" | "worker";
@@ -741,6 +756,8 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify({
         ...data,
+        email: data.email,
+        username: data.email,
         "g-recaptcha-response": recaptchaToken,
         recaptchaToken,
       }),
@@ -758,7 +775,7 @@ export const residentsApi = {
     return normalizeResident(row);
   },
   create: async (data: {
-    id: string; name: string; age: number; gender: string; birthdate: string;
+    id: string; name: string; email?: string; age: number; gender: string; birthdate: string;
     address: string; phone: string; purok: string;
     recaptchaToken?: string;
   }) => {

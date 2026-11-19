@@ -5,20 +5,21 @@ import { pool } from "../legacy/postgresql/pool";
 import { asyncHandler, ApiError } from "../middleware/errorHandler";
 import { JWT_SECRET } from "../middleware/auth";
 
-/** POST /api/auth/login  { username, password } — for admin/worker accounts */
+/** POST /api/auth/login  { email, username, password } — for admin/worker accounts */
 export const staffLogin = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  if (!username || !password) throw new ApiError(400, "username and password are required");
+  const { username, email, password } = req.body;
+  const identifier = (email || username || "").trim().toLowerCase();
+  if (!identifier || !password) throw new ApiError(400, "Gmail address and password are required");
 
   const { rows } = await pool.query(
-    `SELECT * FROM users WHERE username = $1 AND role IN ('admin', 'worker')`,
-    [username]
+    `SELECT * FROM users WHERE (LOWER(username) = $1 OR LOWER(COALESCE(email, '')) = $1) AND role IN ('admin', 'worker')`,
+    [identifier]
   );
   const user = rows[0];
-  if (!user) throw new ApiError(401, "Invalid username or password");
+  if (!user) throw new ApiError(401, "Invalid Gmail address or password");
 
   const valid = await bcrypt.compare(password, user.password_hash);
-  if (!valid) throw new ApiError(401, "Invalid username or password");
+  if (!valid) throw new ApiError(401, "Invalid Gmail address or password");
 
   const token = jwt.sign(
     { id: user.id, username: user.username, role: user.role },
@@ -38,23 +39,24 @@ export const staffLogin = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-/** POST /api/auth/resident-login  { residentId, birthdate } — matches the "Resident ID + birthdate" flow */
+/** POST /api/auth/resident-login  { email, residentId, birthdate } — accepts Gmail address or Resident ID */
 export const residentLogin = asyncHandler(async (req: Request, res: Response) => {
-  const { residentId, birthdate } = req.body;
-  if (!residentId || !birthdate) throw new ApiError(400, "residentId and birthdate are required");
+  const { residentId, email, birthdate } = req.body;
+  const identifier = (email || residentId || "").trim().toLowerCase();
+  if (!identifier || !birthdate) throw new ApiError(400, "Gmail address and birthdate are required");
 
   const { rows } = await pool.query(
-    `SELECT id, name, birthdate FROM residents WHERE id = $1`,
-    [residentId]
+    `SELECT id, name, birthdate, email FROM residents WHERE LOWER(id) = $1 OR LOWER(COALESCE(email, '')) = $1`,
+    [identifier]
   );
   const resident = rows[0];
-  if (!resident) throw new ApiError(401, "Resident ID or birthdate not found");
+  if (!resident) throw new ApiError(401, "Gmail account or birthdate not found");
 
   const storedDate = new Date(resident.birthdate).toISOString().slice(0, 10);
-  if (storedDate !== birthdate) throw new ApiError(401, "Resident ID or birthdate not found");
+  if (storedDate !== birthdate) throw new ApiError(401, "Gmail account or birthdate not found");
 
   const token = jwt.sign(
-    { id: resident.id, username: resident.id, role: "resident", residentId: resident.id },
+    { id: resident.id, username: resident.email || resident.id, role: "resident", residentId: resident.id },
     JWT_SECRET,
     { expiresIn: "8h" }
   );
@@ -62,7 +64,7 @@ export const residentLogin = asyncHandler(async (req: Request, res: Response) =>
   res.json({
     token,
     user: {
-      username: resident.id,
+      username: resident.email || resident.id,
       displayName: resident.name,
       role: "resident",
       residentId: resident.id,
@@ -72,10 +74,16 @@ export const residentLogin = asyncHandler(async (req: Request, res: Response) =>
   });
 });
 
-/** POST /api/auth/register-resident  { name, birthdate, gender, age, address, phone, purok } */
+/** POST /api/auth/register-resident  { name, email, birthdate, gender, age, address, phone, purok } */
 export const registerResident = asyncHandler(async (req: Request, res: Response) => {
-  const { name, birthdate, age, gender, address, phone, purok } = req.body;
-  if (!name || !birthdate) throw new ApiError(400, "Full Name and Date of Birth are required");
+  const { name, email, birthdate, age, gender, address, phone, purok } = req.body;
+  if (!name || !birthdate || !email) throw new ApiError(400, "Full Name, Gmail address, and Date of Birth are required");
+
+  // Check if Gmail is already registered
+  const existing = await pool.query(`SELECT id FROM residents WHERE LOWER(COALESCE(email, '')) = LOWER($1)`, [email.trim()]);
+  if (existing.rows.length > 0) {
+    throw new ApiError(409, "A resident profile with this Gmail account is already registered. Please sign in instead.");
+  }
 
   // Generate next resident ID
   const countRes = await pool.query(`SELECT id FROM residents ORDER BY id DESC LIMIT 1`);
@@ -95,14 +103,14 @@ export const registerResident = asyncHandler(async (req: Request, res: Response)
   }
 
   const { rows } = await pool.query(
-    `INSERT INTO residents (id, name, age, gender, birthdate, address, phone, purok, status)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'Unvaccinated') RETURNING *`,
-    [id, name.trim(), computedAge, gender || "Female", birthdate.slice(0, 10), address || "", phone || "", purok || "Purok 1"]
+    `INSERT INTO residents (id, name, email, age, gender, birthdate, address, phone, purok, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'Unvaccinated') RETURNING *`,
+    [id, name.trim(), email.trim().toLowerCase(), computedAge, gender || "Female", birthdate.slice(0, 10), address || "", phone || "", purok || "Purok 1"]
   );
   const resident = rows[0];
 
   const token = jwt.sign(
-    { id: resident.id, username: resident.id, role: "resident", residentId: resident.id },
+    { id: resident.id, username: resident.email || resident.id, role: "resident", residentId: resident.id },
     JWT_SECRET,
     { expiresIn: "8h" }
   );
@@ -111,7 +119,7 @@ export const registerResident = asyncHandler(async (req: Request, res: Response)
     token,
     residentId: resident.id,
     user: {
-      username: resident.id,
+      username: resident.email || resident.id,
       displayName: resident.name,
       role: "resident",
       residentId: resident.id,
@@ -121,16 +129,20 @@ export const registerResident = asyncHandler(async (req: Request, res: Response)
   });
 });
 
-/** POST /api/auth/register-staff  { username, password, displayName, role, title } */
+/** POST /api/auth/register-staff  { email, username, password, displayName, role, title } */
 export const registerStaff = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password, displayName, role = "worker", title } = req.body;
-  if (!username || !password || !displayName) {
-    throw new ApiError(400, "Username, password, and full name are required");
+  const { email, username, password, displayName, role = "worker", title } = req.body;
+  const staffEmail = (email || username || "").trim().toLowerCase();
+  if (!staffEmail || !password || !displayName) {
+    throw new ApiError(400, "Gmail address, password, and full name are required");
   }
 
-  const existing = await pool.query(`SELECT id FROM users WHERE LOWER(username) = LOWER($1)`, [username.trim()]);
+  const existing = await pool.query(
+    `SELECT id FROM users WHERE LOWER(username) = LOWER($1) OR LOWER(COALESCE(email, '')) = LOWER($1)`,
+    [staffEmail]
+  );
   if (existing.rows.length > 0) {
-    throw new ApiError(409, "Username already registered");
+    throw new ApiError(409, "This Gmail address is already registered as staff.");
   }
 
   const hash = await bcrypt.hash(password, 10);
@@ -138,9 +150,9 @@ export const registerStaff = asyncHandler(async (req: Request, res: Response) =>
   const staffTitle = title || (role === "admin" ? "Barangay Health Officer" : "Registered Nurse");
 
   const { rows } = await pool.query(
-    `INSERT INTO users (username, password_hash, display_name, role, avatar, title)
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, display_name, role, avatar, title`,
-    [username.trim(), hash, displayName.trim(), role === "admin" ? "admin" : "worker", avatar, staffTitle]
+    `INSERT INTO users (username, email, password_hash, display_name, role, avatar, title)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, username, display_name, role, avatar, title`,
+    [staffEmail, staffEmail, hash, displayName.trim(), role === "admin" ? "admin" : "worker", avatar, staffTitle]
   );
   const user = rows[0];
 

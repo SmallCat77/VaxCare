@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   ShieldCheck, Calendar, AlertTriangle, RefreshCw, ArrowLeft,
   ArrowRight, User, Phone, MapPin, CheckCircle2, UserPlus,
-  LogIn, Building2, HelpCircle, Activity, Award, Lock
+  LogIn, Building2, HelpCircle, Activity, Award, Lock, Mail
 } from "lucide-react";
 import { authApi, setToken, ApiClientError } from "../lib/api";
 import { AuthUser } from "../lib/types";
@@ -17,11 +17,12 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
   const [mode, setMode] = useState<"signin" | "register">("signin");
 
   // Sign In State
-  const [residentId, setResidentId] = useState("");
+  const [email, setEmail] = useState("");
   const [birthdate, setBirthdate] = useState("");
 
   // Register State
   const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
   const [regBirthdate, setRegBirthdate] = useState("");
   const [regGender, setRegGender] = useState<"Male" | "Female">("Female");
   const [regPurok, setRegPurok] = useState("Purok 1");
@@ -49,7 +50,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
     }
 
     try {
-      const { token: authToken, user } = await authApi.residentLogin(residentId.trim(), birthdate.trim(), token);
+      const { token: authToken, user } = await authApi.residentLogin(email.trim(), birthdate.trim(), token);
       setToken(authToken);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
       onLogin(user as AuthUser);
@@ -57,7 +58,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
       setError(
         err instanceof ApiClientError
           ? err.message
-          : "Could not find a resident matching this ID and birthdate. Please verify your details or register below."
+          : "Could not find a resident profile matching this Gmail account and birthdate. Please verify your details or register below."
       );
     } finally {
       setLoading(false);
@@ -68,6 +69,12 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!regEmail.includes("@")) {
+      setError("Please enter a valid Gmail address (e.g. yourname@gmail.com).");
+      return;
+    }
+
     setLoading(true);
 
     let token = "";
@@ -84,6 +91,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
       const res = await authApi.registerResident(
         {
           name: regName.trim(),
+          email: regEmail.trim(),
           birthdate: regBirthdate.trim(),
           gender: regGender,
           purok: regPurok,
@@ -149,7 +157,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
               <span className="text-[#2DD4BF]">Accessible Anytime.</span>
             </h1>
             <p className="text-sm xl:text-base text-[#B8D0E4] leading-relaxed max-w-md font-normal">
-              Direct and secure access to verified vaccine certificates, dose schedules, and health records for all barangay residents.
+              Direct and secure access to verified vaccine certificates, dose schedules, and health records for all barangay residents using your Gmail account.
             </p>
           </div>
         </div>
@@ -160,13 +168,13 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
             <div className="w-7 h-7 rounded-lg bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-[#2DD4BF] shrink-0">
               <CheckCircle2 size={16} />
             </div>
-            <span>Instant digital certificate generation with verifiable QR code</span>
+            <span>Instant access with your Gmail account & birthdate</span>
           </div>
           <div className="flex items-center gap-3 text-xs xl:text-sm text-[#D8E6F2]">
             <div className="w-7 h-7 rounded-lg bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-[#2DD4BF] shrink-0">
               <CheckCircle2 size={16} />
             </div>
-            <span>Automated dose reminder schedule & health center advisories</span>
+            <span>Digital immunization certificate with verifiable QR code</span>
           </div>
           <div className="flex items-center gap-3 text-xs xl:text-sm text-[#D8E6F2]">
             <div className="w-7 h-7 rounded-lg bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-[#2DD4BF] shrink-0">
@@ -217,8 +225,8 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 font-normal">
                 {mode === "signin"
-                  ? "Enter your Resident ID & birthdate to view your immunization records"
-                  : "Register as a barangay resident to start your digital health record"}
+                  ? "Enter your registered Gmail address & birthdate to view your records"
+                  : "Register with your Gmail account to start your digital health record"}
               </p>
             </div>
 
@@ -257,7 +265,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
                 <div className="text-xs">
                   <p className="font-bold text-teal-900 dark:text-teal-200">Registration Successful!</p>
                   <p className="text-teal-700 dark:text-teal-300">
-                    Your official Resident ID is <span className="font-mono font-bold text-[#0B7065] dark:text-teal-200">{registeredId}</span>. Logging you in…
+                    Your profile has been registered. Logging you into the portal…
                   </p>
                 </div>
               </div>
@@ -276,15 +284,16 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
-                    <span>Resident ID</span>
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 font-normal">Format: R001, R002...</span>
+                    <span>Gmail Address</span>
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500 font-normal">e.g. name@gmail.com</span>
                   </label>
                   <div className="relative">
                     <input
-                      value={residentId}
-                      onChange={e => { setResidentId(e.target.value); setError(""); }}
-                      placeholder="e.g. R001"
-                      autoComplete="username"
+                      type="email"
+                      value={email}
+                      onChange={e => { setEmail(e.target.value); setError(""); }}
+                      placeholder="e.g. juan.delacruz@gmail.com"
+                      autoComplete="email"
                       required
                       className="w-full bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0B7065] focus:border-[#0B7065] transition-all font-mono"
                     />
@@ -309,7 +318,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
 
                 <button
                   type="submit"
-                  disabled={loading || !residentId || !birthdate}
+                  disabled={loading || !email || !birthdate}
                   className="w-full mt-2 bg-[#0B7065] hover:bg-[#085a52] text-white font-bold text-sm py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm hover:shadow"
                 >
                   {loading ? <RefreshCw size={15} className="animate-spin" /> : <ShieldCheck size={16} />}
@@ -318,13 +327,13 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
 
                 <div className="pt-2 text-center">
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Don't have a Resident ID yet?{" "}
+                    Don't have a registered account yet?{" "}
                     <button
                       type="button"
                       onClick={() => setMode("register")}
                       className="text-[#0B7065] dark:text-teal-400 font-bold hover:underline"
                     >
-                      Register your profile here
+                      Register your Gmail account here
                     </button>
                   </p>
                 </div>
@@ -344,6 +353,21 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
                     placeholder="e.g. Maria Cruz Santos"
                     required
                     className="w-full bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-xl px-3.5 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0B7065] focus:border-[#0B7065] transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Gmail Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={regEmail}
+                    onChange={e => { setRegEmail(e.target.value); setError(""); }}
+                    placeholder="e.g. maria.santos@gmail.com"
+                    autoComplete="email"
+                    required
+                    className="w-full bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-xl px-3.5 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0B7065] focus:border-[#0B7065] transition-all font-mono"
                   />
                 </div>
 
@@ -421,13 +445,13 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
                 <div className="p-3 bg-teal-50 dark:bg-[#081724] border border-teal-100 dark:border-[#163247] rounded-xl text-xs text-slate-600 dark:text-slate-300 flex items-start gap-2">
                   <Award size={15} className="text-[#0B7065] dark:text-teal-400 shrink-0 mt-0.5" />
                   <p>
-                    Your unique Resident ID will be automatically generated upon submission and linked to your digital health profile.
+                    Your digital health profile will be registered with your Gmail account. You can log in anytime using your Gmail and Date of Birth.
                   </p>
                 </div>
 
                 <button
                   type="submit"
-                  disabled={loading || !regName || !regBirthdate}
+                  disabled={loading || !regName || !regEmail || !regBirthdate}
                   className="w-full mt-2 bg-[#0B7065] hover:bg-[#085a52] text-white font-bold text-sm py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm hover:shadow"
                 >
                   {loading ? <RefreshCw size={15} className="animate-spin" /> : <UserPlus size={16} />}
@@ -442,7 +466,7 @@ export function ResidentLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => 
                       onClick={() => setMode("signin")}
                       className="text-[#0B7065] dark:text-teal-400 font-bold hover:underline"
                     >
-                      Sign In with your Resident ID
+                      Sign In with your Gmail account
                     </button>
                   </p>
                 </div>

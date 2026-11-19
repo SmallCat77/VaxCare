@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Stethoscope, Eye, EyeOff, AlertTriangle, RefreshCw, ShieldCheck,
   ArrowLeft, ArrowRight, Lock, KeyRound, User, UserPlus, LogIn,
-  Building2, CheckCircle2, Award, Activity
+  Building2, CheckCircle2, Award, Activity, Mail
 } from "lucide-react";
 import { authApi, setToken, ApiClientError } from "../lib/api";
 import { AuthUser } from "../lib/types";
@@ -17,13 +17,13 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
   const [mode, setMode] = useState<"signin" | "register">("signin");
 
   // Sign In State
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
 
   // Register State
   const [regFullName, setRegFullName] = useState("");
-  const [regUsername, setRegUsername] = useState("");
+  const [regEmail, setRegEmail] = useState("");
   const [regRole, setRegRole] = useState<"worker" | "admin">("worker");
   const [regTitle, setRegTitle] = useState("Registered Nurse");
   const [regPassword, setRegPassword] = useState("");
@@ -50,7 +50,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
     }
 
     try {
-      const { token: authToken, user } = await authApi.staffLogin(username.trim(), password, token);
+      const { token: authToken, user } = await authApi.staffLogin(email.trim(), password, token);
       setToken(authToken);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
       onLogin(user as AuthUser);
@@ -58,7 +58,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
       setError(
         err instanceof ApiClientError
           ? err.message
-          : "Could not reach the server. Please check your staff credentials or network connection."
+          : "Could not reach the server. Please check your staff Gmail credentials or network connection."
       );
     } finally {
       setLoading(false);
@@ -69,6 +69,11 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!regEmail.includes("@")) {
+      setError("Please enter a valid Gmail address (e.g. staff.name@gmail.com).");
+      return;
+    }
 
     if (regPassword !== regConfirmPassword) {
       setError("Passwords do not match. Please verify both password entries.");
@@ -95,7 +100,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
     try {
       const res = await authApi.registerStaff(
         {
-          username: regUsername.trim(),
+          email: regEmail.trim(),
           password: regPassword,
           displayName: regFullName.trim(),
           role: regRole,
@@ -111,7 +116,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
       setError(
         err instanceof ApiClientError
           ? err.message
-          : "Staff registration could not be completed. Please try a different username."
+          : "Staff registration could not be completed. Please check your details or try a different Gmail address."
       );
       setLoading(false);
     }
@@ -178,7 +183,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
             <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shrink-0">
               <CheckCircle2 size={16} />
             </div>
-            <span>Automated DOH immunization reporting & coverage rate analytics</span>
+            <span>Authorized staff sign-in via designated Gmail credentials</span>
           </div>
         </div>
 
@@ -223,8 +228,8 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 font-normal">
                 {mode === "signin"
-                  ? "Enter authorized staff credentials to access the EHR workspace"
-                  : "Register a healthcare staff or administrative account"}
+                  ? "Enter authorized staff Gmail credentials to access the EHR workspace"
+                  : "Register an authorized staff or administrative account"}
               </p>
             </div>
 
@@ -269,15 +274,16 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
-                    <span>Staff Username</span>
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 font-normal">Authorized ID</span>
+                    <span>Staff Gmail Address</span>
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500 font-normal">Authorized Account</span>
                   </label>
                   <div className="relative">
                     <input
-                      value={username}
-                      onChange={e => { setUsername(e.target.value); setError(""); }}
-                      placeholder="e.g. admin or ana.reyes"
-                      autoComplete="username"
+                      type="email"
+                      value={email}
+                      onChange={e => { setEmail(e.target.value); setError(""); }}
+                      placeholder="e.g. doctor@gmail.com or nurse@gmail.com"
+                      autoComplete="email"
                       required
                       className="w-full bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-sky-400 focus:border-slate-900 dark:focus:border-sky-400 transition-all font-mono"
                     />
@@ -310,7 +316,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
 
                 <button
                   type="submit"
-                  disabled={loading || !username || !password}
+                  disabled={loading || !email || !password}
                   className="w-full mt-2 bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold text-sm py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm hover:shadow"
                 >
                   {loading ? <RefreshCw size={15} className="animate-spin" /> : <Lock size={16} />}
@@ -325,7 +331,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
                       onClick={() => setMode("register")}
                       className="text-[#0284C7] dark:text-[#38BDF8] font-bold hover:underline"
                     >
-                      Register staff account
+                      Register staff Gmail account
                     </button>
                   </p>
                 </div>
@@ -351,12 +357,14 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                      Staff Username *
+                      Staff Gmail Address *
                     </label>
                     <input
-                      value={regUsername}
-                      onChange={e => { setRegUsername(e.target.value); setError(""); }}
-                      placeholder="e.g. p.cruz"
+                      type="email"
+                      value={regEmail}
+                      onChange={e => { setRegEmail(e.target.value); setError(""); }}
+                      placeholder="e.g. nurse.ana@gmail.com"
+                      autoComplete="email"
                       required
                       className="w-full bg-slate-50 dark:bg-[#091B27] border border-slate-200 dark:border-[#193347] rounded-xl px-3.5 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-sky-400 focus:border-slate-900 dark:focus:border-sky-400 transition-all font-mono"
                     />
@@ -443,7 +451,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
 
                 <button
                   type="submit"
-                  disabled={loading || !regFullName || !regUsername || !regPassword || !regConfirmPassword}
+                  disabled={loading || !regFullName || !regEmail || !regPassword || !regConfirmPassword}
                   className="w-full mt-2 bg-slate-900 hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold text-sm py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm hover:shadow"
                 >
                   {loading ? <RefreshCw size={15} className="animate-spin" /> : <UserPlus size={16} />}
@@ -458,7 +466,7 @@ export function StaffLoginScreen({ onLogin }: { onLogin: (user: AuthUser) => voi
                       onClick={() => setMode("signin")}
                       className="text-[#0284C7] dark:text-[#38BDF8] font-bold hover:underline"
                     >
-                      Sign In with your username
+                      Sign In with your Gmail account
                     </button>
                   </p>
                 </div>

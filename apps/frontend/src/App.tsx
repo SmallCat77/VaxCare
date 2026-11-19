@@ -131,7 +131,7 @@ export default function App() {
     navigate("/");
   }
 
-  async function handleAddResident(data: { id: string; name: string; age: number; gender: "Male" | "Female"; birthdate: string; address: string; phone: string; purok: string; recaptchaToken?: string }) {
+  async function handleAddResident(data: { id: string; name: string; email?: string; age: number; gender: "Male" | "Female"; birthdate: string; address: string; phone: string; purok: string; recaptchaToken?: string }) {
     const created = await residentsApi.create(data);
     setResidents(prev => [...prev, created]);
   }

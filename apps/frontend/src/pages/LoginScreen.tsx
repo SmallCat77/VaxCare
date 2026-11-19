@@ -102,14 +102,15 @@ export function LoginScreen({ onLogin, initialTab = "staff" }: { onLogin: (user:
           <form onSubmit={handleLogin} className="p-6 space-y-4">
             <div>
               <label className="text-xs font-semibold text-muted-foreground block mb-1.5">
-                {tab === "staff" ? "Username" : "Resident ID"}
+                {tab === "staff" ? "Staff Gmail Address" : "Resident Gmail Address"}
               </label>
               <input
+                type="email"
                 value={username}
                 onChange={e => { setUsername(e.target.value); setError(""); }}
-                placeholder={tab === "staff" ? "e.g. admin" : "e.g. R001"}
-                autoComplete="username"
-                className="w-full bg-input-background border border-border rounded-lg px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                placeholder={tab === "staff" ? "e.g. doctor@gmail.com" : "e.g. maria.santos@gmail.com"}
+                autoComplete="email"
+                className="w-full bg-input-background border border-border rounded-lg px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all font-mono"
               />
             </div>
             <div>

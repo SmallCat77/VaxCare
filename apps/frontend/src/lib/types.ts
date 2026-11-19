@@ -38,6 +38,7 @@ export interface SmsMessage {
 export interface Resident {
   id: string;
   name: string;
+  email?: string;
   age: number;
   gender: "Male" | "Female";
   birthdate: string;

@@ -9,12 +9,12 @@ import { ApiClientError } from "../lib/api";
 import { getRecaptchaToken } from "../lib/recaptcha";
 import { RecaptchaLegalNotice } from "../components/RecaptchaLegalNotice";
 
-export function ResidentsModule({ residents, schedules, onAddResident }: { residents: Resident[]; schedules: ScheduleItem[]; onAddResident: (data: { id: string; name: string; age: number; gender: "Male" | "Female"; birthdate: string; address: string; phone: string; purok: string; recaptchaToken?: string }) => Promise<void> }) {
+export function ResidentsModule({ residents, schedules, onAddResident }: { residents: Resident[]; schedules: ScheduleItem[]; onAddResident: (data: { id: string; name: string; email?: string; age: number; gender: "Male" | "Female"; birthdate: string; address: string; phone: string; purok: string; recaptchaToken?: string }) => Promise<void> }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("All");
   const [selected, setSelected] = useState<Resident | null>(null);
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ name: "", age: "", gender: "Female" as "Male" | "Female", birthdate: "", address: "", phone: "", purok: "Purok 1" });
+  const [form, setForm] = useState({ name: "", email: "", age: "", gender: "Female" as "Male" | "Female", birthdate: "", address: "", phone: "", purok: "Purok 1" });
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
@@ -51,6 +51,7 @@ export function ResidentsModule({ residents, schedules, onAddResident }: { resid
       await onAddResident({
         id: newId,
         name: form.name,
+        email: form.email ? form.email.trim().toLowerCase() : undefined,
         age: Number(form.age) || 0,
         gender: form.gender,
         birthdate: form.birthdate,
@@ -60,7 +61,7 @@ export function ResidentsModule({ residents, schedules, onAddResident }: { resid
         recaptchaToken: token,
       });
       setShowAdd(false);
-      setForm({ name: "", age: "", gender: "Female", birthdate: "", address: "", phone: "", purok: "Purok 1" });
+      setForm({ name: "", email: "", age: "", gender: "Female", birthdate: "", address: "", phone: "", purok: "Purok 1" });
     } catch (err) {
       setSaveError(err instanceof ApiClientError ? err.message : "Failed to register resident. Please try again.");
     } finally {
@@ -115,6 +116,20 @@ export function ResidentsModule({ residents, schedules, onAddResident }: { resid
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="Enter full legal name"
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0B7065]/20 focus:border-[#0B7065] focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center justify-between mb-1.5">
+                  <span>Resident Gmail Address</span>
+                  <span className="text-[10px] font-normal text-slate-400">e.g. maria.santos@gmail.com</span>
+                </label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  placeholder="Enter resident's Gmail address"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0B7065]/20 focus:border-[#0B7065] focus:bg-white transition-all font-mono"
                 />
               </div>
 
