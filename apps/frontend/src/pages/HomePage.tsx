@@ -136,10 +136,10 @@ export function HomePage({ user, onLogout }: HomePageProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#07131D] text-slate-900 dark:text-slate-100 flex flex-col transition-colors" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* ─── Top Advisory Bar ─── */}
-      <div className="bg-[#0B7065] dark:bg-[#084E47] text-white text-xs sm:text-sm py-2.5 px-4 border-b border-[#085a52]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+      <div className="bg-[#0B7065] dark:bg-[#084E47] text-white text-xs sm:text-sm py-2 px-4 border-b border-[#085a52]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div className="flex items-center gap-2.5">
-            <span className="bg-white/20 text-white px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase">
+            <span className="bg-white/20 text-white px-2 py-0.5 rounded-full text-xs font-bold tracking-wider uppercase">
               Advisory
             </span>
             <span className="text-white/95 font-medium">
@@ -155,46 +155,46 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Main Navigation Header ─── */}
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#0A1E2F]/95 backdrop-blur-md border-b border-slate-200 dark:border-[#163247] transition-colors shadow-2xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#0B7065] to-[#14B8A6] flex items-center justify-center text-white shadow-sm shadow-teal-950/20">
-              <Syringe size={22} />
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0B7065] to-[#14B8A6] flex items-center justify-center text-white shadow-xs">
+              <Syringe size={18} />
             </div>
             <div>
-              <span className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                VaxCare <span className="text-xs font-bold bg-teal-50 dark:bg-[#112C3F] text-[#0B7065] dark:text-[#38BDF8] px-2 py-0.5 rounded-md border border-teal-200 dark:border-[#164E63]">v1.0</span>
+              <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5 leading-none">
+                VaxCare <span className="text-[10px] font-bold bg-teal-50 dark:bg-[#112C3F] text-[#0B7065] dark:text-[#38BDF8] px-1.5 py-0.5 rounded border border-teal-200 dark:border-[#164E63]">v1.0</span>
               </span>
-              <p className="text-xs text-slate-500 dark:text-[#8FAEC5] font-semibold -mt-0.5">Barangay Health Center</p>
+              <p className="text-[11px] text-slate-500 dark:text-[#8FAEC5] font-semibold mt-0.5 leading-none">Barangay Health Center</p>
             </div>
           </Link>
 
           {/* Nav Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600 dark:text-slate-300">
-            <a href="#overview" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Overview</a>
-            <a href="#portals" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Resident Portal</a>
-            <a href="#vaccines" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Available Vaccines</a>
-            <a href="#schedule" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Clinic Schedule</a>
-            <a href="#guide" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Resident Guide</a>
-            <a href="#faq" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">FAQs</a>
-            <a href="#contact" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Contact</a>
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-medium text-slate-600 dark:text-slate-300">
+            <a href="#overview" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Overview</a>
+            <a href="#portals" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Resident Portal</a>
+            <a href="#vaccines" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Available Vaccines</a>
+            <a href="#schedule" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Clinic Schedule</a>
+            <a href="#guide" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Resident Guide</a>
+            <a href="#faq" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">FAQs</a>
+            <a href="#contact" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors whitespace-nowrap">Contact</a>
           </nav>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             <ThemeToggle />
             {user ? (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigate(user.role === "resident" ? "/portal" : "/dashboard")}
-                  className="bg-[#0B7065] hover:bg-[#095c53] text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2"
+                  className="bg-[#0B7065] hover:bg-[#095c53] text-white text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-lg transition-all shadow-xs flex items-center gap-1.5 whitespace-nowrap"
                 >
-                  <Activity size={15} />
-                  {user.role === "resident" ? "My Health Portal" : "Staff Dashboard"}
+                  <Activity size={14} />
+                  <span>{user.role === "resident" ? "My Health Portal" : "Staff Dashboard"}</span>
                 </button>
                 <button
                   onClick={onLogout}
-                  className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-red-600 px-3 py-2 rounded-lg transition-colors"
+                  className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-red-600 px-2 py-1.5 rounded-lg transition-colors"
                 >
                   Sign Out
                 </button>
@@ -204,21 +204,20 @@ export function HomePage({ user, onLogout }: HomePageProps) {
                 {/* Resident Access Button */}
                 <Link
                   to="/resident/login"
-                  className="bg-[#0B7065] hover:bg-[#095c53] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-sm"
+                  className="bg-[#0B7065] hover:bg-[#085a52] text-white text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap shadow-xs shrink-0"
                 >
-                  <ShieldCheck size={16} />
+                  <ShieldCheck size={15} />
                   <span>Resident Portal</span>
                 </Link>
 
                 {/* Medical Portal (Staff & Admin Access) */}
                 <Link
                   to="/staff/login"
-                  className="border border-slate-300 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 bg-slate-50 dark:bg-[#0C1D2B] hover:bg-white dark:hover:bg-[#122A3C] text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-2xs group"
+                  className="border border-slate-300 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 bg-white dark:bg-[#0C1D2B] hover:bg-slate-50 dark:hover:bg-[#122A3C] text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap shadow-xs shrink-0 group"
                   title="Staff & Medical Personnel Portal"
                 >
-                  <Stethoscope size={15} className="text-[#0B7065] dark:text-teal-400 group-hover:scale-110 transition-transform" />
-                  <span className="hidden sm:inline">Medical Portal</span>
-                  <span className="sm:hidden">Medical</span>
+                  <Stethoscope size={14} className="text-[#0B7065] dark:text-teal-400 group-hover:scale-105 transition-transform" />
+                  <span>Medical Portal</span>
                 </Link>
               </>
             )}
@@ -226,81 +225,81 @@ export function HomePage({ user, onLogout }: HomePageProps) {
         </div>
       </header>
 
-      {/* ─── Hero Section (Proportionate, Prominent & High-Impact) ─── */}
-      <section id="overview" className="py-16 md:py-24 bg-white dark:bg-[#0A1E2F] border-b border-slate-200 dark:border-[#163247]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+      {/* ─── Hero Section (Dynamic, Proportionate & Responsive) ─── */}
+      <section id="overview" className="py-12 md:py-16 lg:py-20 bg-white dark:bg-[#0A1E2F] border-b border-slate-200 dark:border-[#163247]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-10">
             {/* Minimalist pill badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 dark:bg-[#112C3F] border border-teal-200 dark:border-[#164E63] text-[#0B7065] dark:text-[#38BDF8] text-xs sm:text-sm font-bold mb-5 shadow-2xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-teal-50 dark:bg-[#112C3F] border border-teal-200 dark:border-[#164E63] text-[#0B7065] dark:text-[#38BDF8] text-xs font-bold mb-4 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#0B7065] dark:bg-[#38BDF8] animate-pulse" />
               <span>Official Barangay Health Center Immunization System</span>
             </div>
 
-            {/* Prominent, readable typography */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.12] mb-5">
-              Protecting Our Barangay, <br />
+            {/* Dynamic responsive typography */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.14] mb-4">
+              Protecting Our Barangay, <br className="hidden sm:inline" />
               <span className="text-[#0B7065] dark:text-[#2DD4BF]">One Vaccine at a Time</span>
             </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
+            <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
               Safe, accessible, and digitized healthcare for every family. Check your personal vaccination schedule, review medical histories, and verify official immunization certificates with speed and ease.
             </p>
           </div>
 
           {/* ─── Resident Health Portal Gateway (Citizen-Focused Hero Centerpiece) ─── */}
-          <div id="portals" className="max-w-3xl mx-auto">
-            <div className="bg-white dark:bg-[#0C1F2E] border-2 border-slate-200 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 rounded-2xl p-8 sm:p-10 shadow-md hover:shadow-xl transition-all flex flex-col justify-between group">
+          <div id="portals" className="max-w-4xl mx-auto">
+            <div className="bg-white dark:bg-[#0C1F2E] border border-slate-200 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 rounded-2xl p-6 sm:p-8 lg:p-9 shadow-sm hover:shadow-md transition-all group">
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0B7065]/15 to-[#0B7065]/5 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-[#0B7065] dark:text-teal-400 flex items-center justify-center shadow-xs">
-                    <ShieldCheck size={28} />
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0B7065]/15 to-[#0B7065]/5 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-[#0B7065] dark:text-teal-400 flex items-center justify-center shadow-xs">
+                    <ShieldCheck size={24} />
                   </div>
-                  <span className="text-xs font-bold text-[#0B7065] dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-[#0B7065] dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full border border-teal-200 dark:border-teal-800 uppercase tracking-wider">
                     Residents & Families
                   </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">
                   Resident Health Portal
                 </h2>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+                <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                   Look up your personal and family immunization records, check upcoming dose appointments, and generate verified digital vaccination certificates.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
-                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                  <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
                     <span>Instant access with Resident ID & Birthdate</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                  <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
                     <span>View upcoming vaccine schedules & reminders</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                  <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
                     <span>Download certified Digital Vaccination Cards</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                  <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={16} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
                     <span>Free community healthcare service for all</span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <Link
                   to="/resident/login"
-                  className="w-full bg-[#0B7065] hover:bg-[#085a52] text-white font-bold text-base py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg group-hover:scale-[1.01]"
+                  className="w-full sm:w-auto bg-[#0B7065] hover:bg-[#085a52] text-white font-semibold text-sm py-2.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xs hover:shadow"
                 >
                   <span>Access Resident Health Portal</span>
-                  <ArrowRight size={18} />
+                  <ArrowRight size={16} />
                 </Link>
-                <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-                  Barangay Health Personnel or Staff? Access the{" "}
+                <p className="text-center sm:text-right text-xs text-slate-500 dark:text-slate-400">
+                  Health Personnel or Staff? Access the{" "}
                   <Link to="/staff/login" className="underline hover:text-[#0B7065] dark:hover:text-teal-300 font-semibold">
                     Medical Portal
                   </Link>{" "}
-                  via the top navigation bar.
+                  via the navbar.
                 </p>
               </div>
             </div>
@@ -310,7 +309,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Impact & Key Statistics Section (Clean, Elevated & Solid) ─── */}
       <section className="py-10 bg-[#F4F7FA] dark:bg-[#07131D] border-b border-slate-200 dark:border-[#163247]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-[#0A1E2F] rounded-2xl border border-slate-200 dark:border-[#163247] p-6 sm:p-8 shadow-xs">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800">
               <div className="pt-2 lg:pt-0">
@@ -343,7 +342,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Available Vaccines Section (Cohesive Professional Healthcare Cards) ─── */}
       <section id="vaccines" className="py-16 md:py-24 bg-white dark:bg-[#0A1E2F]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs sm:text-sm font-bold text-[#0B7065] dark:text-teal-400 uppercase tracking-wider">
               Immunization Formulary
@@ -414,7 +413,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Clinic Operating Hours & Schedule ─── */}
       <section id="schedule" className="py-16 md:py-24 bg-[#F8FAFC] dark:bg-[#07131D] border-y border-slate-200 dark:border-[#163247]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left info column */}
             <div className="lg:col-span-5 space-y-6">
@@ -494,7 +493,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Resident Step-by-Step Guide ─── */}
       <section id="guide" className="py-16 md:py-24 bg-white dark:bg-[#0A1E2F]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs sm:text-sm font-bold text-[#0B7065] dark:text-teal-400 uppercase tracking-wider">
               Process Guide
@@ -545,7 +544,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Frequently Asked Questions (FAQ) ─── */}
       <section id="faq" className="py-16 md:py-24 bg-[#F8FAFC] dark:bg-[#07131D] border-y border-slate-200 dark:border-[#163247]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-xs sm:text-sm font-bold text-[#0B7065] dark:text-teal-400 uppercase tracking-wider">
               Help Center
@@ -590,7 +589,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Contact Banner ─── */}
       <section id="contact" className="py-16 bg-white dark:bg-[#0A1E2F]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#0B7065] to-[#0D877A] text-white rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 shadow-xl">
             <div className="max-w-xl">
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
@@ -621,7 +620,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
 
       {/* ─── Footer ─── */}
       <footer className="bg-white dark:bg-[#07131D] border-t border-slate-200 dark:border-[#163247] pt-12 pb-10 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div className="space-y-3">
               <div className="flex items-center gap-2.5">
