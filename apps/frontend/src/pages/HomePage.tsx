@@ -172,7 +172,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
           {/* Nav Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600 dark:text-slate-300">
             <a href="#overview" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Overview</a>
-            <a href="#portals" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Portals</a>
+            <a href="#portals" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Resident Portal</a>
             <a href="#vaccines" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Available Vaccines</a>
             <a href="#schedule" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Clinic Schedule</a>
             <a href="#guide" className="hover:text-[#0B7065] dark:hover:text-teal-400 transition-colors">Resident Guide</a>
@@ -210,13 +210,15 @@ export function HomePage({ user, onLogout }: HomePageProps) {
                   <span>Resident Portal</span>
                 </Link>
 
-                {/* Staff Access Button */}
+                {/* Medical Portal (Staff & Admin Access) */}
                 <Link
                   to="/staff/login"
-                  className="border border-slate-300 dark:border-[#1B364A] hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-[#0C1D2B] hover:bg-slate-50 dark:hover:bg-[#122A3C] text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition-colors flex items-center gap-2 shadow-2xs"
+                  className="border border-slate-300 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 bg-slate-50 dark:bg-[#0C1D2B] hover:bg-white dark:hover:bg-[#122A3C] text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-2xs group"
+                  title="Staff & Medical Personnel Portal"
                 >
-                  <Users size={15} className="text-slate-500 dark:text-slate-400" />
-                  <span className="hidden sm:inline">Staff Access</span>
+                  <Stethoscope size={15} className="text-[#0B7065] dark:text-teal-400 group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline">Medical Portal</span>
+                  <span className="sm:hidden">Medical</span>
                 </Link>
               </>
             )}
@@ -227,7 +229,7 @@ export function HomePage({ user, onLogout }: HomePageProps) {
       {/* ─── Hero Section (Proportionate, Prominent & High-Impact) ─── */}
       <section id="overview" className="py-16 md:py-24 bg-white dark:bg-[#0A1E2F] border-b border-slate-200 dark:border-[#163247]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-12">
             {/* Minimalist pill badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 dark:bg-[#112C3F] border border-teal-200 dark:border-[#164E63] text-[#0B7065] dark:text-[#38BDF8] text-xs sm:text-sm font-bold mb-5 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#0B7065] dark:bg-[#38BDF8] animate-pulse" />
@@ -245,94 +247,62 @@ export function HomePage({ user, onLogout }: HomePageProps) {
             </p>
           </div>
 
-          {/* ─── 2 Portal Gateway Cards (Substantial, Prominent & Touch-Friendly) ─── */}
-          <div id="portals" className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-            {/* Resident Card */}
-            <div className="bg-white dark:bg-[#0C1F2E] border-2 border-slate-200 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 rounded-2xl p-8 sm:p-9 shadow-md hover:shadow-xl transition-all flex flex-col justify-between group">
+          {/* ─── Resident Health Portal Gateway (Citizen-Focused Hero Centerpiece) ─── */}
+          <div id="portals" className="max-w-3xl mx-auto">
+            <div className="bg-white dark:bg-[#0C1F2E] border-2 border-slate-200 dark:border-[#1E3A4E] hover:border-[#0B7065] dark:hover:border-teal-500 rounded-2xl p-8 sm:p-10 shadow-md hover:shadow-xl transition-all flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0B7065]/15 to-[#0B7065]/5 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-[#0B7065] dark:text-teal-400 flex items-center justify-center shadow-xs">
                     <ShieldCheck size={28} />
                   </div>
-                  <span className="text-xs font-bold text-[#0B7065] dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full border border-teal-200 dark:border-teal-800 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-[#0B7065] dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 uppercase tracking-wider">
                     Residents & Families
                   </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight">
                   Resident Health Portal
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                   Look up your personal and family immunization records, check upcoming dose appointments, and generate verified digital vaccination certificates.
                 </p>
 
-                <ul className="space-y-3.5 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200 mb-8">
-                  <li className="flex items-center gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
+                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
                     <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
                     <span>Instant access with Resident ID & Birthdate</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
-                    <span>View upcoming vaccine schedules and reminders</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
-                    <span>Download certified Digital Vaccination Certificates</span>
-                  </li>
-                </ul>
-              </div>
-
-              <Link
-                to="/resident/login"
-                className="w-full bg-[#0B7065] hover:bg-[#085a52] text-white font-bold text-sm sm:text-base py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg group-hover:scale-[1.01]"
-              >
-                <span>Access Resident Portal</span>
-                <ArrowRight size={17} />
-              </Link>
-            </div>
-
-            {/* Staff Card */}
-            <div className="bg-white dark:bg-[#0C1F2E] border-2 border-slate-200 dark:border-[#1E3A4E] hover:border-slate-800 dark:hover:border-slate-400 rounded-2xl p-8 sm:p-9 shadow-md hover:shadow-xl transition-all flex flex-col justify-between group">
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center shadow-xs">
-                    <Stethoscope size={26} />
                   </div>
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 uppercase tracking-wider">
-                    Health Workers & Admins
-                  </span>
+                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                    <span>View upcoming vaccine schedules & reminders</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                    <span>Download certified Digital Vaccination Cards</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 size={18} className="text-[#0B7065] dark:text-teal-400 shrink-0" />
+                    <span>Free community healthcare service for all</span>
+                  </div>
                 </div>
-
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">
-                  Staff & Medical Portal
-                </h2>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-                  Authorized workspace for Barangay Health Officers, Registered Nurses, and BHWs to manage resident registrations, doses, and cold-chain stocks.
-                </p>
-
-                <ul className="space-y-3.5 text-sm sm:text-[15px] font-medium text-slate-700 dark:text-slate-200 mb-8">
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-slate-600 dark:text-slate-400 shrink-0" />
-                    <span>Resident health registration & medical profiling</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-slate-600 dark:text-slate-400 shrink-0" />
-                    <span>Record vaccinations, batch numbers, & injection sites</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-slate-600 dark:text-slate-400 shrink-0" />
-                    <span>Live vaccine inventory restock & DOH analytics reports</span>
-                  </li>
-                </ul>
               </div>
 
-              <Link
-                to="/staff/login"
-                className="w-full bg-[#0A1E2F] hover:bg-[#071724] text-white font-bold text-sm sm:text-base py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg border border-[#163247] group-hover:scale-[1.01]"
-              >
-                <span>Staff & Admin Sign-In</span>
-                <ArrowRight size={17} />
-              </Link>
+              <div className="space-y-3">
+                <Link
+                  to="/resident/login"
+                  className="w-full bg-[#0B7065] hover:bg-[#085a52] text-white font-bold text-base py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg group-hover:scale-[1.01]"
+                >
+                  <span>Access Resident Health Portal</span>
+                  <ArrowRight size={18} />
+                </Link>
+                <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+                  Barangay Health Personnel or Staff? Access the{" "}
+                  <Link to="/staff/login" className="underline hover:text-[#0B7065] dark:hover:text-teal-300 font-semibold">
+                    Medical Portal
+                  </Link>{" "}
+                  via the top navigation bar.
+                </p>
+              </div>
             </div>
           </div>
         </div>
