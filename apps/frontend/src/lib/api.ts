@@ -232,6 +232,93 @@ function handleLocalFallbackRequest<T>(path: string, options: RequestInit = {}):
     } as unknown as T;
   }
 
+  // 1b. Staff Register: POST /auth/register-staff
+  if (path === "/auth/register-staff" && method === "POST") {
+    const { username, password, displayName, role = "worker", title } = body;
+    if (!username || !password || !displayName) {
+      throw new ApiClientError(400, "Username, password, and full name are required");
+    }
+    if (store.users.some((u) => u.username.toLowerCase() === String(username).toLowerCase())) {
+      throw new ApiClientError(409, "Username already registered");
+    }
+    const nextId = store.users.reduce((max, u) => Math.max(max, u.id), 0) + 1;
+    const staffTitle = title || (role === "admin" ? "Barangay Health Officer" : "Registered Nurse");
+    const newUser = {
+      id: nextId,
+      username: String(username).trim(),
+      password: String(password),
+      display_name: String(displayName).trim(),
+      role: (role === "admin" ? "admin" : "worker") as "admin" | "worker",
+      avatar: String(displayName).trim().charAt(0).toUpperCase() || "S",
+      title: staffTitle,
+      created_at: new Date().toISOString(),
+    };
+    store.users.push(newUser);
+    saveFallbackStore(store);
+    return {
+      token: `local-jwt-${newUser.id}-${Date.now()}`,
+      user: {
+        username: newUser.username,
+        displayName: newUser.display_name,
+        role: newUser.role,
+        avatar: newUser.avatar,
+        title: newUser.title,
+      },
+    } as unknown as T;
+  }
+
+  // 2b. Resident Register: POST /auth/register-resident
+  if (path === "/auth/register-resident" && method === "POST") {
+    const { name, birthdate, age, gender = "Female", address = "", phone = "", purok = "Purok 1" } = body;
+    if (!name || !birthdate) {
+      throw new ApiClientError(400, "Full Name and Date of Birth are required");
+    }
+    let nextNum = 1;
+    store.residents.forEach((res) => {
+      const match = res.id.match(/\d+/);
+      if (match) {
+        const n = parseInt(match[0], 10);
+        if (n >= nextNum) nextNum = n + 1;
+      }
+    });
+    const newId = `R${String(nextNum).padStart(3, "0")}`;
+
+    let computedAge = Number(age);
+    if (!computedAge) {
+      const bDate = new Date(birthdate);
+      const diff = Date.now() - bDate.getTime();
+      computedAge = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)));
+    }
+
+    const newResident = {
+      id: newId,
+      name: String(name).trim(),
+      age: computedAge,
+      gender: String(gender),
+      birthdate: String(birthdate).slice(0, 10),
+      address: String(address).trim(),
+      phone: String(phone).trim(),
+      purok: String(purok),
+      status: "Unvaccinated",
+      next_due: null,
+    };
+    store.residents.push(newResident);
+    saveFallbackStore(store);
+
+    return {
+      token: `local-jwt-${newResident.id}-${Date.now()}`,
+      residentId: newResident.id,
+      user: {
+        username: newResident.id,
+        displayName: newResident.name,
+        role: "resident",
+        residentId: newResident.id,
+        avatar: newResident.name.charAt(0).toUpperCase() || "R",
+        title: "Resident",
+      },
+    } as unknown as T;
+  }
+
   // 3. Residents: /residents & /residents/:id & /residents/:id/vaccinations
   const vaxMatch = path.match(/^\/residents\/([^/]+)\/vaccinations$/);
   if (vaxMatch) {
@@ -616,6 +703,44 @@ export const authApi = {
       body: JSON.stringify({
         residentId,
         birthdate,
+        "g-recaptcha-response": recaptchaToken,
+        recaptchaToken,
+      }),
+    }),
+  registerResident: (
+    data: {
+      name: string;
+      birthdate: string;
+      age?: number;
+      gender?: string;
+      address?: string;
+      phone?: string;
+      purok?: string;
+    },
+    recaptchaToken?: string
+  ) =>
+    request<{ token: string; residentId: string; user: any }>("/auth/register-resident", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        "g-recaptcha-response": recaptchaToken,
+        recaptchaToken,
+      }),
+    }),
+  registerStaff: (
+    data: {
+      username: string;
+      password: string;
+      displayName: string;
+      role?: "admin" | "worker";
+      title?: string;
+    },
+    recaptchaToken?: string
+  ) =>
+    request<{ token: string; user: any }>("/auth/register-staff", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
         "g-recaptcha-response": recaptchaToken,
         recaptchaToken,
       }),
